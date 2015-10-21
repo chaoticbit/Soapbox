@@ -14,7 +14,7 @@
     <body>
             <?php 
 //            echo '<a href="' . $logout_url. '">Logout</a>'; 
-//            echo "<a href=".$user_profile['link']." target='_blank' ><img class='fb_profile' src="."https://graph.facebook.com/".$user_profile['id']."/picture?type=large".">"."</a>"."<p class='profile_name'>Welcome ! <em>".$user_profile['name']."</em></p>";
+//            echo "<a href=".$user_profile['link']." target='_blank' ><img src="."https://graph.facebook.com/".$user_profile['id']."/picture?type=large".">"."</a>"."<p class='profile_name'>Welcome ! <em>".$user_profile['name']."</em></p>";
 //            echo "<p>First Name : ".$user_profile['first_name']."</p>";
 //            echo "<p>Id : ".$user_profile['id']."</p>";
 //            echo "<p>Last Name : ".$user_profile['last_name']."</p>";

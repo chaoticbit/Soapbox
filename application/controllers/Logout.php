@@ -7,6 +7,7 @@ class Logout extends CI_Controller {
         $this->session->unset_userdata('fname');
         $this->session->unset_userdata('lname');
         $this->session->unset_userdata('avatarpath');
+        session_destroy();
         redirect(base_url(),'refresh');
     }
 }
