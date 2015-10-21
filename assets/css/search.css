@@ -1,0 +1,164 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Sep 24, 2015, 8:46:12 PM
+    Author     : atharvadandekar
+*/
+.container{
+    width: 100% !important;
+}
+.search-by-type{
+    padding: 0 15px 0 0;
+}
+.search-by-type > ul > li{
+    display: inline-block;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    padding: 10px 5px;
+    width: 100%;
+    cursor: pointer;    
+}
+.search-by-type > ul > li.active{
+    border-color: #333;
+}
+.search-by-type > ul > li:hover h6{
+    color: #000;
+}
+.search-by-type > ul > li > h6{
+    letter-spacing: 1px;
+    color: #444;
+}
+ul.search-by-category-container{
+    display: none;
+    padding: 10px 0;
+    max-height: 290px;
+    overflow: auto;
+}
+ul.search-by-category-container > li{
+    display: inline-block;
+    border-bottom: 1px solid rgba(0,0,0,0.01);
+    width: 100%;
+    cursor: pointer;    
+    padding: 6px 0;
+    color: #666;
+    font-family: 'Open Sans Light';
+    font-size: 17px;
+}
+ul.search-by-category-container > li:hover{
+    color: #000;
+}
+.search--all-container div{
+    
+}
+.avatar{
+    width: 45px;
+    height: 45px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-size: cover;    
+    border-radius: 3px;
+    background-position: 50% 50%;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    background-repeat: no-repeat;
+}
+.load-more{
+    display: table;
+    margin: 20px auto;
+    height: 120px;
+    width: 120px;
+    cursor: pointer;
+}
+.load-more > a{
+    text-transform: uppercase;
+    padding: 0 9px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    display: table-cell;
+    vertical-align: middle;
+    color: #4090db !important;
+}
+.load-more:before{   
+    height: 120px;
+    width: 120px;
+    border: 2px solid #4090db;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    content: '';
+    position: absolute;    
+}
+.thread{
+    margin-top: 10px;
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(100,100,100,0.1);
+}
+li.thread:last-child{
+    border-bottom: none;
+}
+.thread li{
+    display: inline-block;
+    vertical-align: middle;
+}
+.thread ul li > a{
+    color: #09f;
+}
+.dot-center{
+    padding: 0 7px 0 5px;
+}
+.dot-center:after{
+    content: '.';
+    position: absolute;
+}
+.link:hover{
+    text-decoration: underline;
+}
+.tab-container{
+
+}
+.tab-container .featured-tags-title{
+    width: 33%;
+    border-bottom: 1px solid #eae9ed;
+    border-top: none;
+    outline: none;
+}
+.tab-container .featured-tags-title.active{
+    border-color: #444;
+    -webkit-transition: all 0.2s ease-in;
+}
+.tab-container blockquote{
+    margin: 0 !important;
+}
+.search-all-input-mobile{
+    -webkit-border-radius: 0;
+    padding: 5px;
+    width: 100%;
+    font-family: inherit!important;
+    font-size: inherit;
+    line-height: inherit;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.2) !important;
+}
+.clear-text{
+    display: none;
+    position: absolute;
+    right:10px;
+    top: 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+.clear-text:hover{
+    color: #333 !important;
+}
+.thread-desc{
+    overflow: hidden;
+    height: auto;
+    max-height: 200px;
+}

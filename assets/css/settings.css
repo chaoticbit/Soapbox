@@ -1,0 +1,77 @@
+.container{
+    width: 100% !important;
+}
+.settings-subtitle{
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 9pt;
+}
+.avatar-settings{
+    width: 183px;
+    height: 183px;
+    position: relative;
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.avatar-defocus{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+}
+.fa-camera:hover{
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+.settings-input-text{
+    width: 100%;
+    padding: 5px;
+    border: 0;
+    font-size: 90%;
+    color: #555;
+}
+.settings-input-text:focus{
+    border-color: rgba(0,0,0,0.4);
+}
+.settings-input-text:disabled{
+    padding: 5px;
+    background: rgba(0,0,0,0.05) !important;
+}
+ul.basic-info li{
+    display: block;
+    margin-bottom: 10px;
+    position: relative;
+}
+.settings-save{
+    background: #007ee5;
+    background: -o-linear-gradient(top, #168add 0%,#007ee5 100%);
+    background: -ms-linear-gradient(top, #168add 0%,#007ee5 100%);
+    background: -moz-linear-gradient(top, #168add 0%,#007ee5 100%);
+    background: -webkit-linear-gradient(top, #168add 0%,#007ee5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #168add), color-stop(100%, #007ee5));
+    background: linear-gradient(to bottom, #168add 0%,#007ee5 100%);
+    border: 1px solid #0c6ebe;
+    color: white;
+    line-height: normal;
+    border-radius: 3px;
+    -webkit-appearance: none;
+    margin-top: 16px;
+    padding: 5px 10px;
+}
+.settings-save:active{
+    background: #005499 !important;
+}
+.status-symbol{
+    font-size: 11pt;
+    padding-left: 15px;
+    position: absolute;
+    top: 35px;
+    right: 8px;
+}
+input[type='radio'], label{   
+    vertical-align: baseline;
+    margin: 5px;
+ }

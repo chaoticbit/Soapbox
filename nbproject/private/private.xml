@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>application/controllers/Thread.php</url>
+            <bookmark id="1">
+                <name/>
+                <line>20</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/css/main.css</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/models/Ajax_model.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/index_view_1.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/readinglist_view.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/profile_view.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/js/main.js</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/thread_view.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/js/profile.js</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/tag_view.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/controllers/Login.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/css/index.css</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/css/profile.css</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/controllers/Profile.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/controllers/Ajax_Controller.php</file>
+        </group>
+    </open-files>
+</project-private>

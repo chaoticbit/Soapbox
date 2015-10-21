@@ -1,0 +1,36 @@
+.container{
+    width: 100% !important;
+}
+.readingpane ul > li{
+    border-bottom: 1px solid rgba(0,0,0,0.02);
+    padding: 5px 15px;
+}
+.readingpane ul > li:hover{
+    background: #f5f5f5;
+}
+ul.list > li{
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0,0,0,0.02);
+}
+ul.list > li.active{
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.nxt-thread-toggle{
+    padding: 10px;    
+    cursor: pointer;
+}
+.nxt-thread-toggle > p{
+    line-height: 1.5;
+    font-size: 17px;
+    font-family: 'Open Sans Bold';
+}
+.nxt-thread-toggle > p > i{
+    font-size: 22px;
+    padding-top: 3px;
+}
+.thumbnail{
+    background-size: cover;
+    height: 250px;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
