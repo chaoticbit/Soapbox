@@ -8,7 +8,7 @@ public function get_notifications_mobile($uid){
         if($query->num_rows() > 0){
             $result = $query->result_array();
             foreach($result as $item){
-                if($item['type']=='1'){
+                if($item['type']=='1'){//new reply
                 $query_ = $this->db->query("SELECT extendedinfo.uid as euid,extendedinfo.avatarpath,CONCAT(extendedinfo.fname, ' ' ,extendedinfo.lname) as name,reply.tid,reply.srno, thread.title FROM thread, reply, extendedinfo where reply.srno = " . $item['ref']." and reply.tid = thread.srno and reply.uid = extendedinfo.uid");
                 $result_ = $query_->row_array();
                     if($item['readflag']!='0'){
@@ -27,7 +27,7 @@ public function get_notifications_mobile($uid){
                     $response.='</div>';
                     $response.='</a></li>';
                 }
-                if($item['type']=='2'){
+                if($item['type']=='2'){//new comment
                 $query_ = $this->db->query("SELECT extendedinfo.uid as euid,extendedinfo.avatarpath,CONCAT(extendedinfo.fname ,' ', extendedinfo.lname) as name,reply.description,reply.tid,replies_to_reply.srno,replies_to_reply.rid from thread,reply,replies_to_reply,extendedinfo where replies_to_reply.srno=" . $item['ref'] . " and replies_to_reply.rid = reply.srno and reply.tid = thread.srno and replies_to_reply.uid = extendedinfo.uid");
                 $result_ = $query_->row_array();
                     if($item['readflag']!='0'){
@@ -46,7 +46,7 @@ public function get_notifications_mobile($uid){
                     $response.='</div>';
                     $response.='</a></li>';
                 }
-                if($item['type']=='3'){
+                if($item['type']=='3'){//upvote to thread
                 $query_ = $this->db->query("SELECT extendedinfo.uid as euid,extendedinfo.avatarpath,CONCAT(extendedinfo.fname ,' ', extendedinfo.lname) as name,thread.srno,thread.title from thread,extendedinfo,upvotes_to_thread where upvotes_to_thread.srno=" . $item['ref'] . " and thread.srno = upvotes_to_thread.tid and upvotes_to_thread.uid = extendedinfo.uid");
                 $result_ = $query_->row_array();
                     if($item['readflag']!='0'){
@@ -65,7 +65,7 @@ public function get_notifications_mobile($uid){
                     $response.='</div>';
                     $response.='</a></li>';
                 }
-                if($item['type']=='4'){
+                if($item['type']=='4'){//upvote to reply
                 $query_ = $this->db->query("SELECT extendedinfo.uid as euid,extendedinfo.avatarpath, CONCAT(extendedinfo.fname,' ',extendedinfo.lname) as name, reply.description, reply.tid, reply.srno FROM thread, reply, extendedinfo, upvotes_to_replies where upvotes_to_replies.srno = " . $item['ref']." and reply.tid = thread.srno and upvotes_to_replies.rid=reply.srno and upvotes_to_replies.uid = extendedinfo.uid");
                 $result_ = $query_->row_array();
                     if($item['readflag']!='0'){
@@ -84,7 +84,7 @@ public function get_notifications_mobile($uid){
                     $response.='</div>';
                     $response.='</a></li>';
                 }
-                if($item['type']=='5'){
+                if($item['type']=='5'){//mark correct
                 $query_ = $this->db->query("SELECT extendedinfo.uid as euid,extendedinfo.avatarpath,CONCAT(extendedinfo.fname ,' ', extendedinfo.lname) as name,reply.description,reply.tid,reply.srno FROM thread, reply, extendedinfo where reply.srno = " . $item['ref']." and reply.tid = thread.srno and thread.uid = extendedinfo.uid");
                 $result_ = $query_->row_array();
                     if($item['readflag']!='0'){

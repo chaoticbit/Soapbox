@@ -67,6 +67,7 @@ $(document).ready(function () {
     image[2] = asseturl+"images/london.jpg";
     image[3] = asseturl+"images/blur.jpg";
     image[4] = asseturl+"images/home.jpg";
+    image[5] = asseturl+"images/nightlife.jpg";
     var size = image.length;
     var x = Math.floor(size * Math.random())
     $('.bg-blur').css('background', 'url(' + image[x] + ') no-repeat center center fixed');

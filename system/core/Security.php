@@ -469,11 +469,6 @@ class CI_Security {
 				$str = preg_replace_callback('#<a[^a-z0-9>]+([^>]*?)(?:>|$)#si', array($this, '_js_link_removal'), $str);
 			}
 
-			if (preg_match('/<img/i', $str))
-			{
-				$str = preg_replace_callback('#<img[^a-z0-9]+([^>]*?)(?:\s?/?>|$)#si', array($this, '_js_img_removal'), $str);
-			}
-
 			if (preg_match('/script|xss/i', $str))
 			{
 				$str = preg_replace('#</*(?:script|xss).*?>#si', '[removed]', $str);

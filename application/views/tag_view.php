@@ -85,6 +85,7 @@
                                                 echo '<a href="' . base_url() . 'Thread/' . $thread['srno'] . '">';
                                                 $desc = str_replace('<;','&lt;',$thread['description']);
                                                 $desc = str_replace('>;','&gt;',$desc);
+                                                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                                                 echo $desc;
                                                 echo '</a>';
                                                 echo '</div>';

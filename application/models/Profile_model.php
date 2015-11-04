@@ -24,7 +24,7 @@ class Profile_model extends CI_Model{
     }
     public function get_timeline($uid){
         $response = '';
-        $query = $this->db->query("SELECT * FROM activitylog WHERE uid = " . (int)$uid . " ORDER BY timestamp DESC LIMIT 7");
+        $query = $this->db->query("SELECT * FROM activitylog WHERE uid = " . (int)$uid . " ORDER BY timestamp DESC");
         if($query->num_rows() > 0){
             $result = $query->result_array();
             foreach($result as $item){
@@ -100,8 +100,6 @@ class Profile_model extends CI_Model{
                     $response.='</li>';
                 } 
             }
-            $response.='<input type="hidden" value="'.$hdnT.'" id="hdnTimelineT" />';
-            $response.='<a href="javascript:;" data-uname="'.$uid.'" class="fg-darker loadMoreTimeline"><i class="fa fa-refresh txt-center" style="margin:0 0 20px 80px;"></i> Load More</a>';
             $query_ = $this->db->query("SELECT username, timestamp FROM useraccounts WHERE srno = " . (int)$uid . "");
             $result_ = $query_->row_array();
             $response.='<li class="joined-li">';
@@ -142,6 +140,14 @@ class Profile_model extends CI_Model{
                 $query_ = $this->db->query("SELECT useraccounts.username,extendedinfo.fname,extendedinfo.lname,extendedinfo.avatarpath FROM extendedinfo,useraccounts WHERE extendedinfo.uid = " . $result[$i]['uid'] . " AND extendedinfo.uid = useraccounts.srno");
                 $result[$i]['userinfo'] = $query_->result_array();                
             }
+            return $result;
+        }
+        return false;
+    }
+    public function get_hidden_threads($uid){
+        $query = $this->db->query("SELECT useraccounts.username,CONCAT(extendedinfo.fname,' ',extendedinfo.lname) as name,extendedinfo.avatarpath,thread.srno,thread.uid,thread.title FROM useraccounts,extendedinfo,thread,hidethread WHERE hidethread.uid = " . (int)$uid . " AND hidethread.tid = thread.srno AND thread.uid = useraccounts.srno AND thread.uid = extendedinfo.uid");
+        if($query->num_rows() > 0){
+            $result = $query->result_array();
             return $result;
         }
         return false;

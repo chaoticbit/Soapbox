@@ -15,17 +15,18 @@
             <file>file:/Applications/MAMP/htdocs/Soapbox/assets/css/main.css</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/application/models/Ajax_model.php</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/index_view_1.php</file>
-            <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/readinglist_view.php</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/profile_view.php</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/assets/js/main.js</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/thread_view.php</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/assets/js/profile.js</file>
-            <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/tag_view.php</file>
-            <file>file:/Applications/MAMP/htdocs/Soapbox/application/controllers/Login.php</file>
-            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/css/index.css</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/models/Profile_model.php</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/assets/css/profile.css</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/js/index.js</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/css/thread.css</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/application/controllers/Profile.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/assets/js/thread.js</file>
             <file>file:/Applications/MAMP/htdocs/Soapbox/application/controllers/Ajax_Controller.php</file>
+            <file>file:/Applications/MAMP/htdocs/Soapbox/application/views/headbar.php</file>
         </group>
     </open-files>
 </project-private>

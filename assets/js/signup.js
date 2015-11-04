@@ -35,6 +35,7 @@ $(document).ready(function () {
         validate('.' + $(this).attr('class'), /^[A-Za-z]+$/, 1);
     });
     $('.txt-email').bind('input', function () {
+        $('.step-btn-1').removeAttr('disabled');
         if(validate('.' + $(this).attr('class'),  /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/, 1)===1){
             var val = $.trim($(this).val());
             var baseurl = $.trim($('#baseurl').val());
@@ -44,13 +45,18 @@ $(document).ready(function () {
                 dataType: "json",
                 data: {email: val},
                 cache: false,
+                beforeSend:function(){
+                    $('.step-btn-1').attr('disabled','disabled');
+                    $('.txt-email').parent().find('i').removeClass().addClass('fa fa-circle-o-notch fa-spin');
+                },
                 success: function(result){
+                    $('.step-btn-1').removeAttr('disabled');
                     if(result.response==="false"){
                         $('.txt-email').parent().find('i').removeClass();
                         $('.txt-email').parent().find('i').addClass('fa fa-check-circle fg-green');
                         return;
                     }
-                    if(result.response==="true"){
+                    if(result.response==="true"){                        
                         $('.txt-email').parent().find('i').removeClass();
                         $('.txt-email').parent().find('i').addClass('fa fa-times-circle fg-red');
                         return;
@@ -60,7 +66,7 @@ $(document).ready(function () {
         }
     });
     $('.txt-about').bind('input', function () {
-        validate('.' + $(this).attr('class'), /^[A-Za-z0-9 !.,&()?]+$/, 0);
+        validate('.' + $(this).attr('class'), /^[A-Za-z0-9 !.,&()?']+$/, 0);
     });
     $('.security-question').on('change', function () {
         $('input[name="question"]').val($('.security-question').val());
@@ -294,19 +300,22 @@ $(document).ready(function () {
 
     //gender select
     $('.gender').click(function () {
+        var baseurl = $.trim($('#baseurl').val());
         if ($(this).hasClass('male')) {
             $(this).parent().find('.active-female').removeClass('active-female');
             $(this).addClass('active-male');
             $('input[name="gender"]').val('male');
+            $('.avatar').css('background-image','url(' + baseurl + 'assets/images/avatar_male.png)');
         }
         if ($(this).hasClass('female')) {
             $(this).parent().find('.active-male').removeClass('active-male');
             $(this).addClass('active-female');
             $('input[name="gender"]').val('female');
+            $('.avatar').css('background-image','url(' + baseurl + 'assets/images/avatar_female.png)');
         }
     });
 
-    $('.status-symbol').click(function () {
+    $('.fa-asterisk').click(function () {
         alert('This field is mandatory');
     });
 
@@ -351,5 +360,23 @@ $(document).ready(function () {
             $(this).find('.defocus-panel').fadeIn(100);
             $(this).addClass('selected');
         }
+    });
+    
+    $(document).on('click', '.select-all', function(){
+        var str = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28";
+        $('input[name="categories"]').val(str);
+        $('.category').find('.title').removeClass('bg-steel').addClass('bg-green');
+        $('.category').find('.defocus-panel').fadeIn(100);
+        $('.category').addClass('selected');
+        $('.select-all').html('<i class="fa fa-times"></i> Deselect all categories');
+        $('.select-all').removeClass('select-all').addClass('deselect-all');
+    });
+    $(document).on('click', '.deselect-all', function(){
+        $('input[name="categories"]').val('');
+        $('.category').find('.title').removeClass('bg-green').addClass('bg-steel');
+        $('.category').find('.defocus-panel').fadeOut(100);
+        $('.category').removeClass('selected'); 
+        $('.deselect-all').html('<i class="fa fa-check"></i> Select all categories');
+        $('.deselect-all').removeClass('deselect-all').addClass('select-all');
     });
 });

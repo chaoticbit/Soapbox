@@ -5,7 +5,14 @@ class Index_model extends CI_Model{
     public function get_categories_alphabetical($uid){
         $query = $this->db->query("SELECT * FROM category LEFT JOIN category_user ON category.srno=category_user.cid AND category_user.uid=$uid ORDER BY name ASC");
         if($query->num_rows()>0){
-            return $query->result_array();
+            $result = $query->result_array();
+            
+            for($i=0;$i<count($result);$i++){
+                $query_= $this->db->query("SELECT COUNT(*) as count FROM thread WHERE cid=" . (int)$result[$i]['srno']);
+                $result_= $query_->row_array();
+                $result[$i]['count'] = $result_['count'];
+            }
+            return $result;
         }
         return false;
     }
@@ -31,7 +38,7 @@ class Index_model extends CI_Model{
         return false;
     }
     public function get_featured_threads(){
-        $query = $this->db->query("SELECT thread.srno,thread.title,thread.uid,COUNT(upvotes_to_thread.tid) AS upvotes FROM thread LEFT JOIN upvotes_to_thread ON thread.srno = upvotes_to_thread.tid GROUP BY thread.srno ORDER BY upvotes DESC LIMIT 5");
+        $query = $this->db->query("SELECT thread.srno, thread.title, thread.uid FROM thread, weightage WHERE thread.srno=weightage.tid and DATE(thread.timestamp) = CURDATE() ORDER BY weight DESC LIMIT 5");
         if($query->num_rows() > 0){
             $result = $query->result_array();
             for($i = 0;$i < count($result);$i++){
@@ -95,7 +102,7 @@ class Index_model extends CI_Model{
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
                     $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' left a reply on your thread ' . substr($result_['title'],0,20) . '"</p>';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' left a reply on your thread "' . substr($result_['title'],0,20) . '..."</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -114,7 +121,7 @@ class Index_model extends CI_Model{
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
                     $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' left a comment on your reply ' . substr(strip_tags($result_['description']),0,20) . '"</p>';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' left a comment on your reply "' . substr(strip_tags($result_['description']),0,20) . '..."</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -133,7 +140,7 @@ class Index_model extends CI_Model{
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
                     $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' upvoted ' . substr($result_['title'],0,20) . '"</p>';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' upvoted "' . substr($result_['title'],0,20) . '..."</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -147,12 +154,12 @@ class Index_model extends CI_Model{
                     else{
                         $response.='<li class="active-notif">';
                     }
-                    $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $item['ref'] . '/#r' . $item['ref'] . '"><div class="pure-g">';
+                    $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $item['ref'] . '/#r' . $result_['srno'] . '"><div class="pure-g">';
                     $response.='<div class="pure-u-1-8">';
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
                     $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' upvoted reply ' . substr(strip_tags($result_['description']),0,30) . '"</p>';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' upvoted reply "' . substr(strip_tags($result_['description']),0,30) . '..."</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -172,7 +179,7 @@ class Index_model extends CI_Model{
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
                     $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' marked your reply as correct."</p>';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' marked your reply as correct.</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';

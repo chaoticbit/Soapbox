@@ -21,7 +21,7 @@
                     <div class="pure-u-1">
                         <div style="padding: 20px 30px;">
                             <h2 class="light">
-                                <input type="text" class="search-all-input" value="<?php if($param!='index') echo $param; else echo ''; ?>" style="width: 100%;font-family: inherit!important;font-size: inherit;line-height: inherit;border:none;border-bottom: 1px solid rgba(235,235,235,0.7);" />
+                                <input type="text" placeholder="Search" class="search-all-input" value="<?php if($param!='index') echo $param; else echo ''; ?>" style="width: 100%;font-family: inherit!important;font-size: inherit;line-height: inherit;border:none;border-bottom: 1px solid rgba(235,235,235,0.7);" />
                             </h2>
                         </div>
                     </div>

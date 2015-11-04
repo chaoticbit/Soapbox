@@ -45,6 +45,7 @@ class Profile extends CI_Controller {
                 $data['reply_count'] = $this->Profile_model->get_reply_count($result['uid']);
                 $data['timeline'] = $this->Profile_model->get_timeline($result['uid']);
                 $data['get_personal_info'] = $this->Profile_model->get_personal_info($result['uid']);
+                $data['get_hidden_threads'] = $this->Profile_model->get_hidden_threads($result['uid']);
                 $data['top_threads'] = $this->Profile_model->get_top_threads($result['uid']);
                 $data['top_replies'] = $this->Profile_model->get_top_replies($result['uid']);
                 $this->load->view('profile_view', $data);   

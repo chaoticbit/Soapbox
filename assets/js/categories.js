@@ -5,6 +5,7 @@ $(document).ready(function(){
             //$(this).find('.category-defocus').css('background', 'linear-gradient(45deg,#46bddb 20%,#4889f8 40%,#9372bf 100%)');
             $(this).find('.category-defocus').css('background', 'rgba(0,0,0,0.9)');
             $(this).find('.category-title').removeClass('hidden');
+            $(this).find('p').removeClass('hidden');
         }
     });
     $('.category').on('mouseout', function(){
@@ -12,6 +13,7 @@ $(document).ready(function(){
             $(this).find('.category-bg').removeClass('scale');
             $(this).find('.category-defocus').css('background', 'transparent');
             $(this).find('.category-title').addClass('hidden');
+            $(this).find('p').removeClass('hidden');
         }
     });
     $('.category').on('click', function(){

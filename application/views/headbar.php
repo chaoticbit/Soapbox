@@ -32,10 +32,10 @@
                                 <div class="pure-g">
                                     <div class="pure-u-1-2 nav-actions">
                                         <ul>
-                                            <li onclick="window.location.href ='<?php echo base_url(); ?>'">
+                                            <li onclick="window.location.href ='<?php echo base_url(); ?>'" title="Home">
                                                 <i class="fa fa-home fa-fw"></i>
                                             </li>                                            
-                                            <li class="toggle-dropdown">
+                                            <li class="toggle-dropdown" title="Categories">
                                                 <i class="fa fa-exchange fa-fw"></i>
                                                 <ul class="nav-dropdown">
                                                     <div class="overflow-wrap">
@@ -61,11 +61,11 @@
                                                             echo '<p class="txt-left margin0">' . $category['name'] . ' ';
                                                             if($category['uid']==$userid){
                                                                 echo '<i class="fa fa-check fg-green"></i></p>';
-                                                                echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Unfollow">Unfollow</a></p>';
+                                                                echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Unfollow">Unfollow</a> <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                                                             }
                                                             else{
                                                                 echo '<i></i></p>';
-                                                                echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Follow">Follow</a></p>';
+                                                                echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Follow">Follow</a> <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                                                             }
                                                             echo '</div>';
                                                             echo '</div>';
@@ -85,11 +85,11 @@
                                                             echo '<p class="txt-left margin0">' . $category['name'] . ' ';
                                                             if($category['uid']==$userid){
                                                                 echo '<i class="fa fa-check fg-green"></i></p>';
-                                                                echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Unfollow">Unfollow</a></p>';
+                                                                echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Unfollow">Unfollow</a> <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                                                             }
                                                             else{
                                                                 echo '<i></i></p>';
-                                                                echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Follow">Follow</a></p>';
+                                                                echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Follow">Follow</a> <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                                                             }
                                                             echo '</div>';
                                                             echo '</div>';
@@ -112,10 +112,10 @@
                                                 </ul>                                                
                                             </li>
                                             <li class="toggle-dropdown">
-                                                <i class="fa fa-history fa-fw"></i>
-                                                <ul class="nav-dropdown">
+                                                <i class="fa fa-history fa-fw" title="Reading List"></i>
+                                                <ul class="nav-dropdown readinglist-dropdown">
                                                     <div class="overflow-wrap">
-                                                        <li style="padding: 5px 10px;border-bottom: 1px solid #ccc;">
+                                                        <li style="padding: 5px 10px;border-bottom: 1px solid #ccc;" class="headli">
                                                             <div class="pure-g">
                                                                 <div class="pure-u-1-2">
                                                                     <?php
@@ -136,7 +136,7 @@
                                                         <?php
                                                         if($readinglist){
                                                             foreach($readinglist as $item){
-                                                                echo '<li>';
+                                                                echo '<li class="jarl' . $item['srno'] . '">';
                                                                 echo '<div class="pure-g">';
                                                                 echo '<div class="pure-u-1">';
                                                                 echo '<a href="' . base_url() .'Readinglist/' . $item['srno'] . '" style="display: block;"><p class="txt-left margin0"><small><b>' . $item['title'] . '</b></small></p></a>';
@@ -159,7 +159,7 @@
                                                 </ul>                                                
                                             </li>
                                             <li class="toggle-dropdown">
-                                                <i class="fa fa-bell fa-fw"></i>
+                                                <i class="fa fa-bell fa-fw" title="Notifications"></i>
                                                 <span class="bubble"><?php if($nocount != '0') { echo $nocount; } else { echo ''; }?></span>
                                                 <ul class="nav-dropdown notifications-dropdown">
                                                     <div class="overflow-wrap">
@@ -194,7 +194,7 @@
                                                     </div>
                                                 </ul>
                                             </li>
-                                            <li onclick="window.location.href ='<?php echo base_url() . $username; ?>'">
+                                            <li onclick="window.location.href ='<?php echo base_url() . $username; ?>'" title="Profile">
                                                 <i class="fa fa-user fa-fw"></i>
                                             </li>                                            
                                         </ul>
@@ -241,7 +241,7 @@
                                 <li><a href="<?php echo base_url(); ?>Readinglist/m"><i class="fa fa-history fa-fw"></i> Reading List</a></li>
                                 <li><a href="<?php echo base_url(); ?>Notifications"><i class="fa fa-bell fa-fw"></i> Notifications <span class="bubble-mobile-float flt-right"><?php if($nocount != '0') { echo $nocount; } else{ echo '';} ?></span></a></li>
                                 <li><a href="<?php echo base_url() . $username;?>"><i class="fa fa-user fa-fw"></i> Profile</a></li>
-                                <li><a href="javascript:;"><i class="fa fa-cog fa-fw"></i> Settings</a></li>
+                                <li><a href="<?php echo base_url(); ?>Settings"><i class="fa fa-cog fa-fw"></i> Settings</a></li>
                                 <li><a href="<?php echo base_url(); ?>Logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
                             </ul>
                         </div>

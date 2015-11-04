@@ -84,11 +84,12 @@
                                                 </div>
                                                <div class="pure-u-1 thread-image-preview-wrapper" style="display:none;">                                                    
                                                    <div class="thread-image-preview">
-                                                        <i class="fa fa-times-circle pointer fg-white flt-right remove-image" style="margin: 10px 8px 0 0;text-shadow: 0 0 5px rgba(0,0,0,0.7);" title="Remove image"></i>
+<!--                                                        <i class="fa fa-times-circle pointer fg-white flt-right remove-image" style="margin: 10px 8px 0 0;text-shadow: 0 0 5px rgba(0,0,0,0.7);" title="Remove image"></i>-->
                                                     </div>   
                                                     <progress class="image-upload-progress" id="image-upload-progress" value="0" max="100"></progress>
                                                 </div>
-                                                <div class="pure-u-1">
+                                                <div class="pure-u-1" style="position: relative;">
+                                                    <i style="position: absolute;top: 10px;left: -50px;" class="fa fa-plus-circle fa-2x pointer upload_image_toggle" title="Add cover"></i>
                                                     <input type="text" class="thread-title-input" placeholder="Title" />
                                                 </div>
                                                 <div class="pure-u-1">
@@ -96,8 +97,14 @@
                                                     <textarea class="duptarea hidden"></textarea>
                                                 </div>
                                                 <div class="pure-u-1 tag-input-div" style="border-top: 1px solid rgba(235,235,235,0.5);">
-                                                    <input type="text" class="thread-tags-input"  placeholder="add tags here.." />
+                                                    <input type="text" class="thread-tags-input"  placeholder="add tag and press enter" />
                                                     <input type="hidden" name="tags" class="tags" data-cnt="0" value="">
+                                                </div>
+                                                <div style="position: relative;">
+                                                    <div class="dropdown tag-autocomplete-dropdown" style="display: none;left: 0;">
+                                                        <ul>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                                 <div class="pure-g" style="padding: 5px 0;">
                                                     <div class="pure-u-1 pure-u-md-1-2">
@@ -107,13 +114,17 @@
                                                             echo '<input type="file" class="hidden thread-image-ios" accept="image/*" name="file">';
                                                         }
                                                         else{
-                                                            echo '<p><a href="javascript:;" class="fg-darkCyan upload_image_toggle">Add photo</a></p>';
+                                                            //echo '<p class="flt-left"><a href="javascript:;" class="fg-darkCyan upload_image_toggle">Add Cover Photo</a></p>';
+                                                            //echo '<p class="flt-left" style="padding: 0 5px;"><a href="javascript:;" class="fg-darkCyan upload_descimage_toggle">Add Images</a></p>';
                                                             echo '<input type="file" class="hidden thread-image" accept="image/*" name="file">';
+                                                            echo '<input type="file" class="hidden desc-image" accept="image/*" name="file">';
                                                         }
                                                         ?>
-                                                        <input type="hidden" class="dupfilename" />                                                        
+                                                        <input type="hidden" class="dupfilename" id="dupfilename" />                                                        
+                                                        <input type="hidden" class="dupimages" id="dupimages" />
                                                     </div>
                                                     <div class="pure-u-1 pure-u-md-1-2 txt-right">
+                                                        <i class="loader fa fa-circle-o-notch fa-spin" style="display: none;margin-right: 5px;"></i>
                                                         <small class="fg-grayLight untoggle-editor pointer" style="margin-right: 10px;">Cancel</small>
                                                         <button class="btn-post" style="">POST</button>
                                                     </div>
@@ -129,7 +140,7 @@
                                         echo '<ul class="pure-u-1"><li class="hidden thread"></li></ul>';
                                     }
                                     else{
-                                        echo '<ul class="pure-u-1">';
+                                        echo '<ul class="pure-u-1 threadul">';
                                         foreach($threads as $thread){
                                             echo '<li class="pure-u-1 thread" data-tid="' . $thread['srno'] . '">';
                                             echo '<div class="pure-g">';
@@ -158,8 +169,12 @@
                                             else{
                                                 echo '<li class="bg-white fg-gray" data-opt="add_to_list"><a href="javascript:;"><i class="fa fa-book fa-fw"></i> Add to reading list</a></li>';
                                             }
-                                            echo '<li class="bg-white fg-gray" data-opt="delete_thread"><a href="javascript:;"><i class="fa fa-trash fa-fw"></i> Delete this thread</a></li>';
-                                            echo '<li class="bg-white fg-gray rstoggle"><a href="javascript:;"><i class="fa fa-ban fa-fw"></i> Report as spam</a></li>';
+                                            if($thread['uid']==$userid){
+                                                echo '<li class="bg-white fg-gray" data-opt="delete_thread"><a href="javascript:;"><i class="fa fa-trash fa-fw"></i> Delete this thread</a></li>';
+                                            }
+                                            if($thread['uid']!=$userid){
+                                                echo '<li class="bg-white fg-gray rstoggle" data-opt="hide_thread"><a href="javascript:;"><i class="fa fa-ban fa-fw"></i> Hide this thread</a></li>';
+                                            }
                                             echo '</ul>';
                                             echo '</div>';
                                             echo '</div>';                                            
@@ -170,12 +185,13 @@
                                                 echo '<div class="pure-u-1 thumbnail" style="background-image: url(\'' . userdata_url($thread['uid'], $thread['imagepath']) . '\');background-position:' . $thread['coordinates'] . '"></div>';
                                             }
                                             echo '<div class="pure-u-1 ttitle" style="padding: 10px 0;">';
-                                            echo '<a href="' . base_url() . 'Thread/' . $thread['srno'] . '"><h3 class="black" style="color: rgba(0,0,0,0.8);">' . $thread['title'] . '</h3></a>';
+                                            echo '<a href="' . base_url() . 'Thread/' . $thread['srno'] . '"><h3 class="black flt-left" style="color: rgba(0,0,0,0.8);">' . $thread['title'] . '</h3></a>';
                                             echo '</div>';
                                             if($thread['description']!='<p><br></p>'){
                                                 echo '<div class="pure-u-1 thread-desc">';
                                                 $desc = str_replace('<;','&lt;',$thread['description']);
                                                 $desc = str_replace('>;','&gt;',$desc);
+                                                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                                                 echo $desc;
                                                 echo '</div>';
                                             }
@@ -241,12 +257,13 @@
                                             ?>
                                         </div>
                                         <div style="padding: 20px;">
-                                            <p class="featured-tags-title">Top threads</p>
+                                            <p class="featured-tags-title">Today's Top threads</p>
                                         </div>
                                         <div class="featured-threads">
                                             <ul>
                                             <?php
                                             if($featuredthreads){
+                                                $i=1;
                                                 foreach($featuredthreads as $ft){
                                                 echo '<li>';
                                                 foreach($ft['userinfo'] as $usr){
@@ -254,10 +271,10 @@
                                                     $name = $usr['fname'] . ' ' . $usr['lname'];
                                                     $username = $usr['username'];
                                                 }
-                                                echo '<div class="round-count"><span class="star"><i class="fa fa-star fg-yellow"></i></span><span class="upvotecnt">' . $ft['upvotes'] .'</span></div>';
+                                                echo '<div class="round-count"><span class="upvotecnt">' . $i++ .'</span></div>';
                                                 echo '<div class="desc">';
-                                                if(strlen($ft['title'])>35){
-                                                    echo '<p class="thread-title margin0"><a href="' . base_url() . 'Thread/' . $ft['srno'] . '">' . substr($ft['title'],0,35) . '...</a></p>';
+                                                if(strlen($ft['title'])>30){
+                                                    echo '<p class="thread-title margin0"><a href="' . base_url() . 'Thread/' . $ft['srno'] . '">' . substr($ft['title'],0,30) . '...</a></p>';
                                                 }
                                                 else{
                                                     echo '<p class="thread-title margin0"><a href="' . base_url() . 'Thread/' . $ft['srno'] . '">' . $ft['title'] . '</a></p>';

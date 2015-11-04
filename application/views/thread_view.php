@@ -33,7 +33,7 @@
                                                                 <div class="avatar" style="background-image: url('<?php echo userdata_url($thread['uid'], $thread['avatarpath']); ?>');"></div>
                                                             </li>
                                                             <li style="padding-left: 10px;">
-                                                                <p><a href="<?php echo base_url() . $thread['username']; ?>"><?php echo $thread['name']; ?></a><br /><small><a href="javascript:;" class="fg-grayDark link"><?php echo $thread['cname']; ?></a><span class="dot-center"></span><span title="<?php echo $thread['timestamp']; ?>"><?php echo time_elapsed($thread['timestamp']); ?></span></small></p>
+                                                                <p><a href="<?php echo base_url() . $thread['username']; ?>"><?php echo $thread['name']; ?></a><br /><small><a href="javascript:;" class="fg-grayDark link"><?php echo $thread['cname']; ?></a><span class="dot-center"></span><span title="<?php echo $thread['timestamp']; ?>"><?php echo time_elapsed($thread['timestamp']); ?></span><span title="<?php echo $thread['timestamp']; ?>"><?php if($thread['edit']=="1"){echo '<span class="dot-center edit-history link"></span> <a href="javascript:;" class="edit-history fg-grayDark link">Edited</a>';} ?></span></small></p>
                                                             </li>
                                                             <li class="flt-right">
                                                                 <i class="fa fa-chevron-down fg-grayLighter pointer toggle-thread-options"></i>
@@ -52,10 +52,15 @@
                                                                             }
                                                                             else{
                                                                                 echo '<li class="bg-white fg-gray" data-opt="add_to_list"><a href="javascript:;"><i class="fa fa-book fa-fw"></i> Add to reading list</a></li>';
-                                                                            }                                                                            
+                                                                            } 
+                                                                            if($userid==$thread['uid']){
+                                                                                echo '<li class="bg-white fg-gray" data-opt="delete_thread"><a href="javascript:;"><i class="fa fa-trash fa-fw"></i> Delete this thread</a></li>';
+                                                                                echo '<li class="bg-white fg-gray edit-toggle" data-opt="edit_thread"><a href="javascript:;"><i class="fa fa-edit fa-fw"></i> Edit this thread</a></li>';
+                                                                            }
+                                                                            if($userid!=$thread['uid']){
+                                                                                echo '<li class="bg-white fg-gray rstoggle" data-opt="hide_thread"><a href="javascript:;"><i class="fa fa-ban fa-fw"></i> Hide this thread</a></li>';
+                                                                            }
                                                                             ?>
-                                                                            <li class="bg-white fg-gray" data-opt="delete_thread"><a href="javascript:;"><i class="fa fa-trash fa-fw"></i> Delete this thread</a></li>
-                                                                            <li class="bg-white fg-gray rstoggle"><a href="javascript:;"><i class="fa fa-ban fa-fw"></i> Report as spam</a></li>
                                                                         </ul>
                                                                     </div>
                                                                 </div>                                            
@@ -78,12 +83,14 @@
                                         <?php 
                                         $desc = str_replace('<;','&lt;',$thread['description']);
                                         $desc = str_replace('>;','&gt;',$desc);
+                                        $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                                         echo $desc;
                                         ?>
                                     </div>
+                                    <textarea class="duptarea-edit hidden" value=""></textarea>
                                     <?php
                                     if($thread['tags']){
-                                        echo '<div class="pure-u-1" style="padding: 10px 0;">';
+                                        echo '<div class="pure-u-1 div-tags" style="padding: 10px 0;">';
                                         foreach($thread['tags'] as $tag){
                                             echo '<a href="' . base_url() . 'Tag/' . $tag['name'] . '" class="tag">' . $tag['name'] . '</a>';
                                         }
@@ -95,16 +102,17 @@
                                             <div class="pure-u-1 pure-u-md-1-2">
                                                 <?php
                                                 if($thread['up_flag']){
-                                                    echo '<p class="upvote-action"><span id="rm-upvote-thread" class="margin0 bg-cyan fg-white bold pointer" data-tid="' . $thread['srno'] . '"><i class="fa fa-star"></i> You have upvoted</span></p>';
+                                                    echo '<p class="upvote-action"><span id="rm-upvote-thread" class="margin0 bg-cyan fg-white bold pointer" data-tid="' . $thread['srno'] . '"><i class="fa fa-star"></i> You have upvoted</span> ';
                                                 }
                                                 else{
-                                                    echo '<p class="upvote-action"><span id="upvote-thread" class="margin0 bg-grayLighter fg-grayLight bold pointer" data-tid="' . $thread['srno'] . '"><i class="fa fa-star"></i> Upvote this thread</span></p>';
+                                                    echo '<p class="upvote-action"><span id="upvote-thread" class="margin0 bg-grayLighter fg-grayLight bold pointer" data-tid="' . $thread['srno'] . '"><i class="fa fa-star"></i> Upvote this thread</span> ';
                                                 }
                                                 ?>
+                                                <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>
                                             </div>
                                             <div class="pure-u-1 pure-u-md-1-2">
                                                 <p class="fg-grayLight stats-span stats-desktop" style="text-align: right;"><span class="pointer upvotes-to-thread"><?php echo ($thread['upvotes'] > 1 || $thread['upvotes']==0) ? $thread['upvotes'] . ' Upvotes' : $thread['upvotes'] . ' Upvote' ?></span><span><?php echo ($thread['replies'] > 1 || $thread['replies']==0) ? $thread['replies'] . ' Replies' : $thread['replies'] . ' Reply' ?></span><span class="pointer views-to-thread"><?php echo ($thread['views'] > 1 || $thread['views']==0) ? $thread['views'] . ' Views' : $thread['views'] . ' View' ?></span></p>
-                                                <p class="fg-grayLight stats-span stats-mobile" style="display: none;"><span class="pointer upvotes-to-thread"><i class="fa fa-star-o"></i> <?php echo $thread['upvotes']; ?></span> <span><i class="fa fa-comment-o"></i> <?php echo $thread['replies']; ?></span> <span class="pointer views-to-thread"><i class="fa fa-rss"></i> <?php echo $thread['views']; ?></span></p>
+                                                <p class="fg-grayLight stats-span stats-mobile txt-center" style="display: none;"><span class="pointer upvotes-to-thread"><i class="fa fa-star-o"></i> <?php echo $thread['upvotes']; ?></span> <span><i class="fa fa-comment-o"></i> <?php echo $thread['replies']; ?></span> <span class="pointer views-to-thread"><i class="fa fa-rss"></i> <?php echo $thread['views']; ?></span></p>
                                             </div>
                                         </div>
                                     </div>                                    
@@ -139,6 +147,7 @@
                                 <div class="pure-g" style="padding: 5px 0;">
                                     <div class="pure-u-1 pure-u-md-1-2"></div>
                                     <div class="pure-u-1 pure-u-md-1-2 txt-right">
+                                        <i style="margin: 2px 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i>
                                         <small class="fg-grayLight untoggle-editor pointer" style="margin-right: 10px;">Cancel</small>
                                         <button class="btn-post">REPLY</button>
                                     </div>
@@ -162,7 +171,7 @@
                                     echo '<div class="avatar" style="background-image: url(\'' . userdata_url($reply['uid'], $reply['avatarpath']) . '\');"></div>';
                                     echo '</li>';
                                     echo '<li style="padding-left: 10px;">';
-                                    echo '<p><a href="javascript:;">' . $reply['name'] . '</a><br /><small title="' . $reply['timestamp'] . '"><span style="margin-right: 5px;">' . time_elapsed($reply['timestamp']) . '</span> ';
+                                    echo '<p><a href="' . base_url() . $reply['username'] . '">' . $reply['name'] . '</a><br /><small title="' . $reply['timestamp'] . '"><span style="margin-right: 5px;">' . time_elapsed($reply['timestamp']) . '</span> ';
                                     if($thread['uid']==$userid){
                                         if($reply['correct']==1){
                                             echo '<span class="fg-green pointer remove-correct"><i class="fa fa-check-circle"></i> Correct</span>';
@@ -175,9 +184,6 @@
                                         if($reply['correct']==1){
                                             echo '<span class="fg-green"><i class="fa fa-check-circle"></i> Correct</span>';
                                         } 
-                                        else{
-                                            echo '<span class="fg-grayLight">Mark correct</span>';
-                                        }
                                     }                                    
                                     echo '</small></p>';
                                     echo '</li>';
@@ -196,10 +202,10 @@
                                     echo '<div class="pure-u-1-4">';
                                     echo '<p>';
                                     if($reply['upvote_flag']){
-                                        echo '<a id="rm-upvote-reply" href="javascript:;">You upvoted!</a></p>';
+                                        echo '<a id="rm-upvote-reply" href="javascript:;">You upvoted!</a> <i style="display:none;margin-left: 5px;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                                     }
                                     else{
-                                        echo '<a id="upvote-reply" href="javascript:;">Upvote</a></p>';
+                                        echo '<a id="upvote-reply" href="javascript:;">Upvote</a> <i style="display:none;margin-left: 5px;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                                     }
                                     echo '</div>';
                                     echo '<div class="pure-u-3-4">';

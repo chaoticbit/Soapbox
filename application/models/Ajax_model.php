@@ -21,11 +21,13 @@ class Ajax_model extends CI_Model {
         }
     }
     public function post_thread($data){
-        $query = $this->db->query("INSERT into thread(title,description,imagepath,coordinates,cid,uid) VALUES(" . $this->db->escape($data['title']) . ",'" . $data['desc'] . "'," . $this->db->escape($data['filename']) . "," . $this->db->escape($data['coordinates']) . "," . (int)$data['category'] . "," . (int)$data['uid'] . ")");
+        
+        $query = $this->db->query("INSERT INTO thread(title,description,imagepath,coordinates,cid,uid) VALUES('" . $data['title'] . "','" . safeThreadContent($data['desc']) . "'," . $this->db->escape($data['filename']) . "," . $this->db->escape($data['coordinates']) . "," . (int)$data['category'] . "," . (int)$data['uid'] . ")");
         $query_ = $this->db->query("SELECT thread.srno, thread.uid, thread.timestamp, thread.imagepath, thread.title, thread.description, thread.coordinates, extendedinfo.fname, extendedinfo.lname, extendedinfo.avatarpath, category.name as cname FROM thread, extendedinfo, category WHERE thread.uid = " . (int)$data['uid'] . " AND thread.uid=extendedinfo.uid AND thread.cid=category.srno ORDER BY timestamp DESC LIMIT 1");
         if($query_->num_rows() > 0){
             $result = $query_->row_array();
-            $query = $this->db->query("INSERT into trackthread values(" . (int)$result['srno'] . "," . (int)$result['uid'] . ")");
+            $query = $this->db->query("INSERT INTO trackthread values(" . (int)$result['srno'] . "," . (int)$result['uid'] . ")");
+            $query = $this->db->query("INSERT INTO weightage(tid, timestamp) values(" . (int)$result['srno'] . ", '" . $result['timestamp'] ."')");
             if($data['tags']!=""){
                 $orig = $this->db->db_debug;
                 $this->db->db_debug = FALSE;                
@@ -33,8 +35,8 @@ class Ajax_model extends CI_Model {
                 
                 foreach($array as $element){
                     $element = preg_replace('/[^A-Za-z0-9\-]/', '', $element);
-                    $query = $this->db->query("INSERT into tags VALUES('$element')");
-                    $query = $this->db->query("INSERT into thread_tags VALUES('" . $element . "'," . (int)$result['srno'] . ")");
+                    $query = $this->db->query("INSERT INTO tags VALUES('$element')");
+                    $query = $this->db->query("INSERT INTO thread_tags VALUES('" . $element . "'," . (int)$result['srno'] . ")");
                 } 
                 
                 $this->db->db_debug = $orig;
@@ -54,10 +56,9 @@ class Ajax_model extends CI_Model {
             $response.='<div class="thread-options-dropdown-parent" style="display: none;position: relative;">';
             $response.='<div class="dropdown thread-options-dropdown" style="right: 0;">';
             $response.='<ul>';
-            $response.='<li class="bg-green fg-white" data-opt="untrack_thread"><a href="javascript:;"><i class="fa fa-check fa-fw"></i> Track this thread</a></li>';
-            $response.='<li class="bg-white fg-gray" data-opt="add_to_list"><a href="#"><i class="fa fa-book fa-fw"></i> Add to Reading list</a></li>';
-            $response.='<li class="bg-white fg-gray" data-opt="delete_thread"><a href="#"><i class="fa fa-trash fa-fw"></i> Delete this thread</a></li>';
-            $response.='<li class="bg-white fg-gray" data-opt="report_spam"><a href="#"><i class="fa fa-ban fa-fw"></i> Report as spam</a></li>';
+            $response.='<li class="fg-green" data-opt="untrack_thread"><a href="javascript:;"><i class="fa fa-check fa-fw"></i> Track this thread</a></li>';
+            $response.='<li class="fg-gray" data-opt="add_to_list"><a href="#"><i class="fa fa-book fa-fw"></i> Add to reading list</a></li>';
+            $response.='<li class="fg-gray" data-opt="delete_thread"><a href="#"><i class="fa fa-trash fa-fw"></i> Delete this thread</a></li>';
             $response.='</ul>';
             $response.='</div>';
             $response.='</div>';                                            
@@ -73,6 +74,7 @@ class Ajax_model extends CI_Model {
             $response.='<div class="pure-u-1 thread-desc">';
             $desc = str_replace('<;','&lt;',$result['description']);
             $desc = str_replace('>;','&gt;',$desc);
+            $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
             $response.= $desc;
             $response.='</div>';
             $response.='<div class="pure-u-1" style="padding: 10px 0;">';
@@ -135,7 +137,7 @@ class Ajax_model extends CI_Model {
     public function thread_options($data){
         switch($data['opt'])
         {
-            case 'track_thread':    $query = $this->db->query("INSERT into trackthread values(" . (int)$data['tid'] . "," . (int)$data['uid'] . ")");        
+            case 'track_thread':    $query = $this->db->query("INSERT INTO trackthread values(" . (int)$data['tid'] . "," . (int)$data['uid'] . ")");        
                                     $query_ = $this->db->query("SELECT * from trackthread WHERE tid = " . (int)$data['tid'] . " AND uid = " . (int)$data['uid']);
                                     if($query_->num_rows()>0){
                                         $data = array('response'=>'true','opt'=>'untrack_thread','link'=>'<a href="javascript:;"><i class="fa fa-check fa-fw"></i> Tracking this thread</a>');
@@ -147,7 +149,7 @@ class Ajax_model extends CI_Model {
                                     $data = array('response'=>'true','opt'=>'track_thread','link'=>'<a href="javascript:;"><i class="fa fa-binoculars fa-fw"></i> Track this thread</a>');
                                     return $data;
                                     break;
-            case 'add_to_list':     $query = $this->db->query("INSERT into readinglist(tid, uid) values(" . (int)$data['tid'] . "," . (int)$data['uid'] . ")");
+            case 'add_to_list':     $query = $this->db->query("INSERT INTO readinglist(tid, uid) values(" . (int)$data['tid'] . "," . (int)$data['uid'] . ")");
                                     $query_ = $this->db->query("SELECT * from readinglist WHERE tid = " . (int)$data['tid'] . " AND uid = " . (int)$data['uid']);
                                     if($query_->num_rows()>0){
                                         $data = array('response'=>'true','opt'=>'remove_from_list','link'=>'<a href="javascript:;"><i class="fa fa-check fa-fw"></i> Added to reading list</a>');
@@ -174,7 +176,7 @@ class Ajax_model extends CI_Model {
                                     }
                                     return false;
                                     break;
-            case 'hide_thread'  :   $query = $this->db->query("INSERT into hidethread values(" . (int)$data['tid'] . "," . (int)$data['uid'] . ")");
+            case 'hide_thread'  :   $query = $this->db->query("INSERT INTO hidethread values(" . (int)$data['tid'] . "," . (int)$data['uid'] . ")");
                                     $query_ = $this->db->query("SELECT * from hidethread WHERE tid = " . (int)$data['tid'] . " AND uid = " . (int)$data['uid']);
                                     if($query_->num_rows()>0){
                                         $data = array('response'=>'true','opt'=>'hide_thread');
@@ -196,7 +198,7 @@ class Ajax_model extends CI_Model {
             $this->db->query("DELETE from category_user WHERE uid = " . (int)$data['uid']);
             $array = explode(',',$data['cid']);
             foreach($array as $item){
-                $this->db->query("INSERT into category_user values(" . (int)$item . "," . (int)$data['uid']  . ")");
+                $this->db->query("INSERT INTO category_user values(" . (int)$item . "," . (int)$data['uid']  . ")");
             }
             $this->db->db_debug = $orig;
             return true;
@@ -283,6 +285,7 @@ class Ajax_model extends CI_Model {
                     $response.='<div class="pure-u-1 thread-desc">';
                     $desc = str_replace('<;','&lt;',$item['description']);
                     $desc = str_replace('>;','&gt;',$desc);
+                    $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                     $response.= $desc;
                     $response.='</div>';
                     $response.='<div class="pure-u-1" style="padding: 10px 0;">';
@@ -333,6 +336,7 @@ class Ajax_model extends CI_Model {
                 $response.='<div class="pure-u-1 thread-desc">';
                 $desc = str_replace('<;','&lt;',$item['description']);
                 $desc = str_replace('>;','&gt;',$desc);
+                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                 $response.= $desc;
                 $response.='</div>';
                 $query_upvotes = $this->db->query("SELECT * FROM upvotes_to_thread WHERE tid = " . $item['srno']);
@@ -374,7 +378,7 @@ class Ajax_model extends CI_Model {
             if($query_one->num_rows() > 0){
                 $result = $query_one->result_array();
                 $response.='<div class="pure-u-2-3">';
-                $response.='<p class="featured-tags-title">Threads</p>';
+                $response.='<p class="featured-tags-title" style="border: 0;">Threads</p>';
                 $response.='<div style="padding: 10px 0 10px 0;" class="search--threads">';
                 $response.='<ul>';
                 foreach($result as $item){
@@ -397,6 +401,7 @@ class Ajax_model extends CI_Model {
                     $response.='<div class="pure-u-1 thread-desc">';
                     $desc = str_replace('<;','&lt;',$item['description']);
                     $desc = str_replace('>;','&gt;',$desc);
+                    $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                     $response.= $desc;
                     $response.='</div>';
                     $query_upvotes = $this->db->query("SELECT * FROM upvotes_to_thread WHERE tid = " . $item['srno']);
@@ -451,12 +456,12 @@ class Ajax_model extends CI_Model {
                 $response.='</div>';
             }
             else{
-                $response.='<div class="pure-u-2-3"><h4 class="txt-center margin0" style="padding: 0 10px 10px;">Couldn\'t find anything :(</h4></div>';
+                $response.='<div class="pure-u-2-3"><h4 class="txt-center margin0 fg-grayLight" style="padding: 0 10px 10px;">Couldn\'t find any threads :(</h4></div>';
             }
 
             $response.='<div class="pure-u-1-3">';
             $response.='<div class="search--tags" style="padding-left: 10px;margin-bottom: 20px;max-height: 200px;">';
-            $response.='<p class="featured-tags-title">Tags</p>';
+            $response.='<p class="featured-tags-title" style="border: 0;">Tags</p>';
             $response.='<div style="padding: 10px 0 10px 0;">';
             if($query_two->num_rows() > 0){
                 $result = $query_two->result_array();
@@ -465,12 +470,12 @@ class Ajax_model extends CI_Model {
                 }
             }            
             else{
-                $response.='<div class="pure-u-1"><p class="margin0" style="">Couldn\'t find anything :(</p></div>';
+                $response.='<div class="pure-u-1"><p class="margin0 fg-grayLight" style="">Couldn\'t find any tags :(</p></div>';
             }
             $response.='</div>';
             $response.='</div>';
             $response.='<div class="search--people" style="padding-left: 10px;max-height: 200px;">';
-            $response.='<p class="featured-tags-title">People</p>';
+            $response.='<p class="featured-tags-title" style="margin-top: 15px;">People</p>';
             $response.='<div style="padding: 10px 0 10px 0;">';
             $response.='<ul>';
 
@@ -584,8 +589,11 @@ class Ajax_model extends CI_Model {
                 $response.='<div class="pure-u-1 pointer" style="padding: 0px 0;">';
                 $response.='<a href="' . base_url() . 'Thread/' . $item['srno'] . '"><h5 class="black" style="color: rgba(0,0,0,0.8);">' . $item['title'] .'</h5></a>';
                 $response.='</div>';
-                $response.='<div class="pure-u-1 pointer thread-desc">';
-                $response.='<p class="serif">' . $item['description'] . '</p>';
+                $response.='<div class="pure-u-1 thread-desc">';
+                $desc = str_replace('<;','&lt;',$item['description']);
+                $desc = str_replace('>;','&gt;',$desc);
+                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
+                $response.= $desc;
                 $response.='</div>';
                 $query_upvotes = $this->db->query("SELECT * FROM upvotes_to_thread WHERE tid = " . $item['srno']);
                 $upvotes = $query_upvotes->num_rows();
@@ -679,6 +687,7 @@ class Ajax_model extends CI_Model {
                 $response.='<div class="pure-u-1 thread-desc">';
                 $desc = str_replace('<;','&lt;',$result['description']);
                 $desc = str_replace('>;','&gt;',$desc);
+                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                 $response.= $desc;
                 $response.='</div>';
                 $response.='<div class="pure-u-1" style="padding: 10px 0;">';
@@ -761,6 +770,7 @@ class Ajax_model extends CI_Model {
                 $response.='<div class="pure-u-1 thread-desc">';
                 $desc = str_replace('<;','&lt;',$result['description']);
                 $desc = str_replace('>;','&gt;',$desc);
+                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                 $response.= $desc;
                 $response.='</div>';
                 $response.='<div class="pure-u-1" style="padding: 10px 0;">';
@@ -826,8 +836,8 @@ class Ajax_model extends CI_Model {
         $response = '';
         $query = $this->db->query("SELECT * FROM thread where srno = " . (int)$data['tid']);
         if($query->num_rows() > 0){
-            $this->db->query("INSERT into reply(description, tid, uid) values('" . $data['desc'] . "'," . (int)$data['tid']. "," . (int)$data['uid'] . ")");
-            $query_ = $this->db->query("SELECT * FROM reply WHERE reply.uid = " . (int)$data['uid']." and reply.tid = " . (int)$data['tid'] . " ORDER BY timestamp desc LIMIT 1");
+            $this->db->query("INSERT INTO reply(description, tid, uid) values('" . safeThreadContent($data['desc']) . "'," . (int)$data['tid']. "," . (int)$data['uid'] . ")");
+            $query_ = $this->db->query("SELECT reply.*, useraccounts.username FROM reply, useraccounts WHERE useraccounts.srno=reply.uid AND reply.uid = " . (int)$data['uid']." and reply.tid = " . (int)$data['tid'] . " ORDER BY timestamp desc LIMIT 1");
             if($query_->num_rows() > 0){
                 $reply = $query_->row_array();
                 
@@ -839,30 +849,26 @@ class Ajax_model extends CI_Model {
                 $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($reply['uid'], $data['avatarpath']) . '\');"></div>';
                 $response.='</li>';
                 $response.='<li style="padding-left: 10px;">';
-                $response.='<p><a href="javascript:;">' . $data['name'] . '</a><br /><small>' . time_elapsed($reply['timestamp']) . ' ';
+                $response.='<p><a href="' . base_url() . $reply['username'] . '">' . $data['name'] . '</a><br /><small>' . time_elapsed($reply['timestamp']) . ' ';
                 $response.=' <span class="fg-green hidden" style="margin-left: 5px;"><i class="fa fa-check-circle"></i> Correct</span>';
                 $response.='</small></p>';
                 $response.='</li>';
                 $response.='<li class="flt-right">';
-                $response.='<i class="fa fa-chevron-down fg-grayLighter pointer toggle-thread-options"></i>';
-                $response.='<div class="thread-options-dropdown-parent" style="display: none;position: relative;">';
-                $response.='<div class="dropdown thread-options-dropdown" style="right: 0;width: 95px;">';
-                $response.='<ul>';
-                $response.='<li class="fg-gray" data-opt="delete_reply"><a href="javascript:;"><i class="fa fa-remove fa-fw"></i> Delete</a></li>';
-                $response.='</ul>';
-                $response.='</div>';
-                $response.='</div>';
+                $response.='<i class="fa fa-remove pointer reply-remove"></i>';
                 $response.='</li>';
                 $response.='</ul>';
                 $response.='</div>';
                 $response.='<div class="pure-u-1 reply-desc thread-desc">';
-                $response.=$reply['description'];
+                $desc = str_replace('<;','&lt;',$reply['description']);
+                $desc = str_replace('>;','&gt;',$desc);
+                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
+                $response.= $desc;
                 $response.='</div>';
                 $response.='<div class="pure-u-1">';
                 $response.='<div class="pure-g">';
                 $response.='<div class="pure-u-1-4">';
                 $response.='<p>';
-                $response.='<a id="upvote-reply" href="javascript:;">Upvote</a></p>';
+                $response.='<a id="upvote-reply" href="javascript:;">Upvote</a> <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                 $response.='</div>';
                 $response.='<div class="pure-u-3-4">';
                 $response.='<p class="txt-right">';
@@ -961,6 +967,7 @@ class Ajax_model extends CI_Model {
                 $response.='<div class="pure-u-1 thread-desc">';
                 $desc = str_replace('<;','&lt;',$item['description']);
                 $desc = str_replace('>;','&gt;',$desc);
+                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                 $response.= $desc;
                 $response.='</div>';
                 $response.='<div class="pure-u-1">';
@@ -1050,19 +1057,19 @@ class Ajax_model extends CI_Model {
     
     public function post_thread_mobile($data) {
         $response = '';
-        $query = $this->db->query("INSERT into thread(title,description,imagepath,coordinates,cid,uid) VALUES(" . $this->db->escape($data['title']) . ",'" . $data['desc'] . "'," . $this->db->escape($data['filename']) . "," . $this->db->escape($data['coordinates']) . "," . (int)$data['category'] . "," . (int)$data['uid'] . ")");
+        $query = $this->db->query("INSERT INTO thread(title,description,imagepath,coordinates,cid,uid) VALUES(" . $this->db->escape($data['title']) . ",'" . $data['desc'] . "'," . $this->db->escape($data['filename']) . "," . $this->db->escape($data['coordinates']) . "," . (int)$data['category'] . "," . (int)$data['uid'] . ")");
         $query_ = $this->db->query("SELECT thread.srno,thread.uid FROM thread, extendedinfo, category WHERE thread.uid = " . (int)$data['uid'] . " AND thread.uid=extendedinfo.uid AND thread.cid=category.srno ORDER BY timestamp DESC LIMIT 1");
         if($query_->num_rows() > 0){
             $result = $query_->row_array();
-            $query = $this->db->query("INSERT into trackthread values(" . (int)$result['srno'] . "," . (int)$result['uid'] . ")");
+            $query = $this->db->query("INSERT INTO trackthread values(" . (int)$result['srno'] . "," . (int)$result['uid'] . ")");
             if($data['tags']!=""){
                 $orig = $this->db->db_debug;
                 $this->db->db_debug = FALSE;                
                 $array = explode(',', $data['tags']);
                 
                 foreach($array as $element){
-                    $query = $this->db->query("INSERT into tags VALUES('$element')");
-                    $query = $this->db->query("INSERT into thread_tags VALUES('" . $element . "'," . (int)$result['srno'] . ")");
+                    $query = $this->db->query("INSERT INTO tags VALUES('$element')");
+                    $query = $this->db->query("INSERT INTO thread_tags VALUES('" . $element . "'," . (int)$result['srno'] . ")");
                 } 
                 
                 $this->db->db_debug = $orig;
@@ -1101,12 +1108,12 @@ class Ajax_model extends CI_Model {
                 $result_ = $query_->row_array();
                     $response.='<li class="beeper">';
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $item['ref'] . '/#r' . $item['ref'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="margin: 2px 0;height:50px;width:50px;background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 22px;">';
+                    $response.='<div class="pure-u-3-4">';
                     $response.='<i class="fa fa-times fg-white flt-right close-beeper"></i>';
-                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' left a reply on your thread ' . substr($result_['title'],0,20) . '"</p>';
+                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' left a reply on your thread "' . substr($result_['title'],0,20) . '"</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1116,12 +1123,12 @@ class Ajax_model extends CI_Model {
                 $result_ = $query_->row_array();
                     $response.='<li class="beeper">';
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $item['ref'] . '/#r' . $result_['rid'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="margin: 2px 0;height:50px;width:50px;background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 22px;">';
+                    $response.='<div class="pure-u-3-4">';
                     $response.='<i class="fa fa-times fg-white flt-right close-beeper"></i>';
-                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' left a comment on your reply ' . substr(strip_tags($result_['description']),0,20) . '"</p>';
+                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' left a comment on your reply "' . substr(strip_tags($result_['description']),0,20) . '"</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1131,12 +1138,12 @@ class Ajax_model extends CI_Model {
                 $result_ = $query_->row_array();                    
                     $response.='<li class="beeper">';
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['srno'] . '/' . $item['ref'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="margin: 2px 0;height:50px;width:50px;background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 22px;">';
+                    $response.='<div class="pure-u-3-4">';
                     $response.='<i class="fa fa-times fg-white flt-right close-beeper"></i>';
-                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' upvoted ' . substr($result_['title'],0,20) . '"</p>';
+                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' upvoted "' . substr($result_['title'],0,20) . '"</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1146,12 +1153,12 @@ class Ajax_model extends CI_Model {
                 $result_ = $query_->row_array();
                     $response.='<li class="beeper">';
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $item['ref'] . '/#r' . $item['ref'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="margin: 2px 0;height:50px;width:50px;background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 22px;">';
+                    $response.='<div class="pure-u-3-4">';
                     $response.='<i class="fa fa-times fg-white flt-right close-beeper"></i>';
-                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' upvoted reply ' . substr(strip_tags($result_['description']),0,30) . '"</p>';
+                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' upvoted reply "' . substr(strip_tags($result_['description']),0,30) . '"</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1161,12 +1168,12 @@ class Ajax_model extends CI_Model {
                 $result_ = $query_->row_array();                    
                     $response.='<li class="beeper">';
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['tsrno'] . '/' . $item['ref'] . '/#r' . $item['ref'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="margin: 2px 0;height:50px;width:50px;background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 22px;">';
+                    $response.='<div class="pure-u-3-4">';
                     $response.='<i class="fa fa-times fg-white flt-right close-beeper"></i>';
-                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' marked your reply as correct."</p>';
+                    $response.='<p class="txt-left margin0 bold fg-white" style="font-size: 13px;line-height: 1.3;">' . $result_['name'] . ' marked your reply as correct.</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1206,11 +1213,11 @@ class Ajax_model extends CI_Model {
                         $response.='<li class="active-notif">';
                     }
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $item['ref'] . '/#r' . $item['ref'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' left a reply on your thread ' . substr($result_['title'],0,20) . '"</p>';
+                    $response.='<div class="pure-u-3-4" style="padding-left: 10px;">';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' left a reply on your thread "' . substr($result_['title'],0,20) . '"</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1225,11 +1232,11 @@ class Ajax_model extends CI_Model {
                         $response.='<li class="active-notif">';
                     }
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $item['ref'] . '/#r' . $result_['rid'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' left a comment on your reply ' . substr(strip_tags($result_['description']),0,20) . '"</p>';
+                    $response.='<div class="pure-u-3-4" style="padding-left: 10px;">';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' left a comment on your reply "' . substr(strip_tags($result_['description']),0,20) . '"</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1244,11 +1251,11 @@ class Ajax_model extends CI_Model {
                         $response.='<li class="active-notif">';
                     }
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['srno'] . '/' . $item['ref'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' upvoted ' . substr($result_['title'],0,20) . '"</p>';
+                    $response.='<div class="pure-u-3-4" style="padding-left: 10px;">';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' upvoted "' . substr($result_['title'],0,20) . '"</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1262,12 +1269,12 @@ class Ajax_model extends CI_Model {
                     else{
                         $response.='<li class="active-notif">';
                     }
-                    $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $item['ref'] . '/#r' . $item['ref'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<a href="' . base_url() . 'Thread/' . $result_['tid'] . '/' . $result_['srno'] . '/#r' . $item['ref'] . '"><div class="pure-g">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' upvoted reply ' . substr(strip_tags($result_['description']),0,30) . '"</p>';
+                    $response.='<div class="pure-u-3-4" style="padding-left: 10px;">';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' upvoted reply "' . substr(strip_tags($result_['description']),0,30) . '"</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1282,11 +1289,11 @@ class Ajax_model extends CI_Model {
                         $response.='<li class="active-notif">';
                     }
                     $response.='<a href="' . base_url() . 'Thread/' . $result_['tsrno'] . '/' . $item['ref'] . '/#r' . $item['ref'] . '"><div class="pure-g">';
-                    $response.='<div class="pure-u-1-8">';
+                    $response.='<div class="pure-u-1-4">';
                     $response.='<div class="avatar" style="background-image: url(\'' . userdata_url($result_['euid'], $result_['avatarpath']) . '\');"></div>';
                     $response.='</div>';
-                    $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
-                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' marked your reply as correct."</p>';
+                    $response.='<div class="pure-u-3-4" style="padding-left: 10px;">';
+                    $response.='<p class="txt-left margin0">' . $result_['name'] . ' marked your reply as correct.</p>';
                     $response.='</div>';
                     $response.='</div>';
                     $response.='</a></li>';
@@ -1306,7 +1313,7 @@ class Ajax_model extends CI_Model {
                 $response.='<li>';
                 $response.='<a href="' . base_url() . $item['username'] . '">';
                 $response.='<div class="pure-g">';
-                $response.='<div class="pure-u-1-8 ">';
+                $response.='<div class="pure-u-1-8">';
                 $response.='<div class="avatar flt-left" style="background-image: url(\'' . userdata_url($item['uid'], $item['avatarpath']) . '\');"></div>';
                 $response.='</div>';
                 $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
@@ -1329,7 +1336,7 @@ class Ajax_model extends CI_Model {
                 $response.='<li>';
                 $response.='<a href="' . base_url() . $item['username'] . '">';
                 $response.='<div class="pure-g">';
-                $response.='<div class="pure-u-1-8 ">';
+                $response.='<div class="pure-u-1-8">';
                 $response.='<div class="avatar flt-left" style="background-image: url(\'' . userdata_url($item['uid'], $item['avatarpath']) . '\');"></div>';
                 $response.='</div>';
                 $response.='<div class="pure-u-7-8" style="padding-left: 10px;">';
@@ -1442,4 +1449,86 @@ class Ajax_model extends CI_Model {
         }
         return false;
     }
+    public function edit_thread($data){
+        $this->db->query("UPDATE thread set title='" . $data['title'] . "', description='" . $data['desc']. "',coordinates='" . $data['coordinates']."',edit=1 WHERE srno=" . (int)$data['tid'] . "");
+    }
+    public function pull_t_desc($data){
+        $query = $this->db->query("SELECT * from thread where srno = " . (int)$data['tid']);
+        if($query->num_rows() > 0){
+            $result = $query->row_array();
+            $response['title'] = $result['title'];
+            $response['description'] = str_replace('<;','&lt;',$result['description']);
+            $response['description'] = str_replace('>;','&gt;',$response['description']);
+            $response['coordinates'] = $result['coordinates'];
+            return $response;
+        }
+        return false;
+    }
+    public function edit_history($data){
+        $query = $this->db->query("SELECT threadhistory.title,threadhistory.description,threadhistory.imagepath,threadhistory.coordinates,threadhistory.timestamp as editedtimestamp,threadhistory.uid,threadhistory.tid,thread.timestamp,thread.description as tdesc,useraccounts.username,extendedinfo.avatarpath,CONCAT(extendedinfo.fname,' ',extendedinfo.lname) as name,category.name as cname from threadhistory,useraccounts,extendedinfo,thread,category where threadhistory.tid = " . (int)$data['tid'] . " and threadhistory.tid = thread.srno and threadhistory.cid = category.srno and threadhistory.uid = useraccounts.srno and threadhistory.uid = extendedinfo.uid ORDER by threadhistory.timestamp DESC");
+        if($query->num_rows() > 0){
+            require_once APPPATH . 'libraries/class.Diff.php';
+            $response='';
+            $result = $query->result_array();
+            foreach($result as $item){
+                $response.='<li class="pure-u-1 thread" data-tid="' . $item['tid'] .'" style="padding: 0;border-bottom: 1px solid rgba(235,235,235,0.4);">';
+                $response.='<div class="pure-g"><div class="pure-u-1"><p>Edited Time : ' . $item['editedtimestamp'] . '</p></div></div>';
+                $response.='<div class="pure-g">';
+                $response.='<div class="pure-u-1" style="margin-bottom: 0px;">';
+                $response.='<ul>';
+                $response.='<li>';
+                $response.='<div class="avatar" style="background-image: url(' . base_url() . 'userdata/' . $item['uid'] . '/' .$item['avatarpath'] .');"></div>';
+                $response.='</li>';
+                $response.='<li style="padding-left: 10px;">';
+                $response.='<p><a href="' . base_url() . $item['username'] . '">' . $item['name'] . '</a><br /><small><a href="javascript:;" class="fg-grayDark link">' . $item['cname'] . '</a><span class="dot-center"></span>' . time_elapsed($item['timestamp']) . '</small></p>';
+                $response.='</li>';
+                $response.='</ul>';
+                $response.='</div>';
+                $response.='<div class="pure-u-1 pointer" style="padding: 0px 0;">';
+                $response.='<a href="' . base_url() . 'Thread/' . $item['tid'] . '"><h5 class="black" style="color: rgba(0,0,0,0.8);">' . $item['title'] .'</h5></a>';
+                $response.='</div>';
+                $response.='<div class="pure-u-1 thread-desc">';
+                $desc = str_replace('<;','&lt;',$item['description']);
+                $desc = str_replace('>;','&gt;',$desc);
+                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
+                $response.= Diff::toHTML(Diff::compare($desc, $item['tdesc']));
+                $response.='</div>';
+                $response.='<div class="pure-u-1">';
+                $response.='<p><a href="' . base_url() . 'Thread/' . $item['tid'] . '">See full thread</a></p>';
+                $response.='</div>';
+                $query_upvotes = $this->db->query("SELECT * FROM upvotes_to_thread WHERE tid = " . $item['tid']);
+                $upvotes = $query_upvotes->num_rows();
+                $query_replies = $this->db->query("SELECT * FROM reply WHERE tid = " . $item['tid']);
+                $replies = $query_replies->num_rows();
+                $query_views = $this->db->query("SELECT * FROM views WHERE tid = " . $item['tid']);
+                $views = $query_views->num_rows();
+                $response.='<div class="pure-u-1 thread-stats">';
+                $response.='<p class="flt-left fg-grayLight"><span style="padding-right: 20px;">' . $upvotes . ' Upvotes</span><span style="padding-right: 20px;">' . $replies . ' Replies</span>' . $views . ' Views</p>';
+                $response.='</div>';
+                $response.='</div>';
+                $response.='</li>';
+            }
+            
+            return $response;
+        }
+        return false;
+    }
+    public function autocomplete_tags($data){
+        $response = '';
+        $query = $this->db->query("SELECT name FROM tags WHERE name LIKE '" . $data['key'] . "%'");
+        if($query->num_rows() > 0){
+            $result = $query->result_array();
+            foreach($result as $item){
+                $response .= '<li class="bg-white fg-gray"><a href="javascript:;">' . $item['name'] . '</a></li>';
+            }
+            return $response;
+        }
+    }
+    
+    public function get_real_views($data){
+        $query = $this->db->query("SELECT COUNT(*) as count FROM views WHERE tid=" . (int)$data['tid']);
+        $result = $query->row_array();
+        return $result['count'];
+    }
 }
+

@@ -3,7 +3,7 @@
 class Settings_model extends CI_Model{
     
     public function fetch_info($data){
-        $query = $this->db->query("SELECT * FROM extendedinfo WHERE uid=" . (int)$data);
+        $query = $this->db->query("SELECT extendedinfo.*, useraccounts.username FROM extendedinfo, useraccounts WHERE useraccounts.srno=extendedinfo.uid AND uid=" . (int)$data);
         if($query->num_rows()>0){
             $result = $query->row_array();
             return $result;
@@ -50,9 +50,16 @@ class Settings_model extends CI_Model{
             else{
                 $query_= $this->db->query("UPDATE extendedinfo SET email='" . $data['email'] ."' WHERE uid=" . (int)$data['uid']);
                 $_query= $this->db->query("SELECT * FROM extendedinfo WHERE email='" . $data['email'] . "' AND uid=" . (int)$data['uid']);
-                if($_query->num_rows()>0){
-                    return true;
+                if(!($_query->num_rows()>0)){
+                    return false;
                 }
+            }
+        }
+        if(strlen($data['username'])){
+            $query = $this->db->query("UPDATE useraccounts SET username='" . $data['username'] . "' WHERE srno=" . (int)$data['uid']);
+            $query_= $this->db->query("SELECT * FROM useraccounts WHERE username='" . $data['username'] . "' AND srno=" . (int)$data['uid']);
+            if(!($query_->num_rows()>0)){
+                return false;
             }
         }
         return true;
@@ -78,23 +85,34 @@ class Settings_model extends CI_Model{
             $sql.="city='" . $data['city'] . "',";
         }
         if(strlen($data['profession'])>0){
-            $sql.="profession='" . $data['profession'] . "',";
+            $sql.="profession='" . mysql_escape_string($data['profession']) . "',";
         }
         if(strlen($data['about'])>0){
-            $sql.="about='" . $data['about'] . "',";
+            $sql.="about='" . mysql_escape_string($data['about']) . "',";
         }
         if(strlen($data['education'])>0){
-            $sql.="education='" . $data['education'] . "',";
+            $sql.="education='" . mysql_escape_string($data['education']) . "',";
         }
         if(strlen($data['college'])>0){
-            $sql.="college='" . $data['college'] . "',";
+            $sql.="college='" . mysql_escape_string($data['college']) . "',";
         }
         if(strlen($data['school'])>0){
-            $sql.="school='" . $data['school'] . "',";
+            $sql.="school='" . mysql_escape_string($data['school']) . "',";
         }
         $sql = rtrim($sql, ",");
         $sql.=" WHERE uid=" . (int)$data['uid'];
         $this->db->query($sql);
         return true;
+    }
+    
+    public function delete_account($data){
+        $query = $this->db->query("SELECT * FROM useraccounts WHERE password='" . mysql_escape_string($data['password']) . "' AND srno=" . (int)$data['uid']);
+        if($query->num_rows()>0){
+            $query_= $this->db->query("DELETE FROM useraccounts WHERE srno=" . (int)$data['uid']);
+            $dir = FCPATH . 'userdata/' . $data['uid'];
+            system('/bin/rm -rf ' . escapeshellarg($dir));
+            return true;
+        }
+        return false;
     }
 }

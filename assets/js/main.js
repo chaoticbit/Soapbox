@@ -105,7 +105,8 @@ $(document).ready(function () {
         $('body').addClass('offscroll');
     });
 
-$('.search').on('input', function () {
+    $('.search').on('input', function () {
+        $(this).val($(this).val().replace(/^[!@#$%^&*()-+_='";:,.<>?/[\]{}']/g, ''));
         $('.search-wrapper,.search-dropdown').show();
         $('body').addClass('offscroll');
         var baseurl = $('#baseurl').val();
@@ -114,7 +115,7 @@ $('.search').on('input', function () {
             $('.search-dropdown > ul').html('');
             return;
         }
-        else{
+        else {
             if (val.charAt(0) !== '>' && val.charAt(0) !== '<') {
                 $.ajax({
                     type: 'post',
@@ -131,7 +132,9 @@ $('.search').on('input', function () {
                 });
             }
         }
-    });    $('.search').on('keydown', function (e) {
+    });
+
+    $('.search').on('keydown', function (e) {
         var $listItems = $('.search-dropdown > ul > li');
         var key = e.keyCode, $selected = $listItems.filter('.selected'), $current;
         if (key !== 40 && key !== 38 && key !== 13 && key !== 27) {
@@ -202,7 +205,7 @@ $('.search').on('input', function () {
             data: {cid: cid, action: action},
             cache: false,
             beforeSend: function () {
-
+                $(elem).parent().find('.loader').show();
             },
             success: function (result) {
                 if (result.response === "false") {
@@ -210,6 +213,7 @@ $('.search').on('input', function () {
                     return;
                 }
                 else {
+                    $(elem).parent().find('.loader').hide();
                     elem.text(result.response);
                     elem.data('action', result.response);
                     if (result.response === "Unfollow") {
@@ -266,36 +270,15 @@ $('.search').on('input', function () {
     });
     
     $(document).on('click','.rstoggle',function(){
-       $(this).closest('li.thread > .pure-g').fadeOut(); 
-       $('<div class="pure-u-1 report-spam">\n\
-        <p class="bold" style="padding: 10px 0 0 2px;">Why don\'t you want to see this thread? <i class="fa fa-times fg-grayLight flt-right close-report-spam pointer"></i></p>\n\
-        <ul>\n\
-            <li>\n\
-                <p><input type="radio" name="rs" data-opt="annoy" /> It\'s annoying or not interesting</p>\n\
-            </li>\n\
-            <li>\n\
-                <p><input type="radio" name="rs" data-opt="hide_thread" /> I don\'t like it and want to hide it</p>\n\
-            </li>\n\
-            <li>\n\
-                <p><input type="radio" name="rs" data-opt="annoy2" /> I think it shouldn\'t be on Soapbox</p>\n\
-            </li>\n\
-            <li>\n\
-                <p><input type="radio" name="rs" data-opt="spam" /> It\'s spam</p>\n\
-            </li>\n\
-        </ul>\n\
-        <button class="rptspam-btn">continue</button>\n\
-        </div>').appendTo($(this).closest('li.thread'));
-    });
-    
-    $(document).on('click','.close-report-spam',function(){        
-        $(this).parent().closest('li.thread').find('.pure-g').fadeIn();
-        $(this).closest('.report-spam').fadeOut();
-    });
-    $(document).on('click', '.rptspam-btn', function(){
         var baseurl = $.trim($('#baseurl').val());
         var tid = $(this).closest('.thread').attr('data-tid');
-        var opt = $(this).closest('.report-spam').find('input:checked').attr('data-opt');         
+        var opt = $(this).attr('data-opt');         
         var elem = $(this);
+        if(opt=="hide_thread"){
+            if(!confirm('Are you sure you want to hide?')){
+                return;
+            }
+        }
         $.ajax({
             type: 'post',
             url: baseurl+'Ajax_Controller/thread_options/' + opt,
@@ -315,19 +298,87 @@ $('.search').on('input', function () {
                             </div>').insertBefore($(elem).closest('.thread'));
                             return;
                         });
+                        if(window.location.href.split('/')[4] === 'Thread'){
+                            window.location.href = baseurl; 
+                        }
                     }
                 }
                 else{
                     alert('Something went wrong. Please try again later.');
                 }
             }
-        });        
+        });      
+//       $(this).closest('li.thread > .pure-g').fadeOut(); 
+//       $('<div class="pure-u-1 report-spam">\n\
+//        <p class="bold" style="padding: 10px 0 0 2px;">Why don\'t you want to see this thread? <i class="fa fa-times fg-grayLight flt-right close-report-spam pointer"></i></p>\n\
+//        <ul>\n\
+//            <li>\n\
+//                <p><input type="radio" name="rs" data-opt="annoy" /> It\'s annoying or not interesting</p>\n\
+//            </li>\n\
+//            <li>\n\
+//                <p><input type="radio" name="rs" data-opt="hide_thread" /> I don\'t like it and want to hide it</p>\n\
+//            </li>\n\
+//            <li>\n\
+//                <p><input type="radio" name="rs" data-opt="annoy2" /> I think it shouldn\'t be on Soapbox</p>\n\
+//            </li>\n\
+//            <li>\n\
+//                <p><input type="radio" name="rs" data-opt="spam" /> It\'s spam</p>\n\
+//            </li>\n\
+//        </ul>\n\
+//        <button class="rptspam-btn">continue</button>\n\
+//        </div>').appendTo($(this).closest('li.thread'));
+        
     });
     
+//    $(document).on('click','.close-report-spam',function(){        
+//        $(this).parent().closest('li.thread').find('.pure-g').fadeIn();
+//        $(this).closest('.report-spam').fadeOut();
+//    });
+//    $(document).on('click', '.rptspam-btn', function(){
+//        var baseurl = $.trim($('#baseurl').val());
+//        var tid = $(this).closest('.thread').attr('data-tid');
+//        var opt = $(this).closest('.report-spam').find('input:checked').attr('data-opt');         
+//        var elem = $(this);
+//        $.ajax({
+//            type: 'post',
+//            url: baseurl+'Ajax_Controller/thread_options/' + opt,
+//            dataType : "json",
+//            data: {tid: tid},
+//            cache: false,
+//            beforeSend: function(){
+//
+//            },
+//            success: function(result){                
+//                if(result.response !== "false"){
+//                    if(result.opt === 'hide_thread'){
+//                        var tid = $(elem).closest('.thread').attr('data-tid');
+//                        $(elem).closest('.thread').fadeOut(function(){
+//                            $('<div class="pure-u-1 report-spam unhide-box">\n\
+//                            <p class="margin0">Your thread has been hidden. Do you want to unhide it ? <a href="javascript:;" class="flt-right unhindebtn" data-tid="' + tid + '" data-opt="unhide_thread">UNHIDE</a> <a href="javascript:;" onclick="$(this).parent().parent().remove();" class="flt-right">IGNORE</a></p>\n\
+//                            </div>').insertBefore($(elem).closest('.thread'));
+//                            return;
+//                        });
+//                    }
+//                }
+//                else{
+//                    alert('Something went wrong. Please try again later.');
+//                }
+//            }
+//        });        
+//    });
+  
     $(document).on('click','.unhindebtn',function(){
         var baseurl = $.trim($('#baseurl').val());
         var tid = $(this).attr('data-tid');
         var opt = $(this).attr('data-opt');         
+        var elem = $(this);
+        
+        if(window.location.href !== 'http://localhost/Soapbox/'){
+            if(!confirm('Are you sure you want to unhide?')){
+                return;
+            }
+        }
+        
         $.ajax({
             type: 'post',
             url: baseurl+'Ajax_Controller/thread_options/' + opt,
@@ -340,9 +391,16 @@ $('.search').on('input', function () {
             success: function(result){                
                 if(result.response !== "false"){
                     if(result.opt === 'unhide_thread'){
-                       $('.report-spam').hide();
-                       $('.unhide-box').remove();
-                       $('li.thread[data-tid="' + tid + '"],li.thread[data-tid="' + tid + '"] > .pure-g').fadeIn();
+                        if(window.location.href === 'http://localhost/Soapbox/'){
+                            $('.report-spam').hide();
+                            $('.unhide-box').remove();
+                            $('li.thread[data-tid="' + tid + '"],li.thread[data-tid="' + tid + '"] > .pure-g').fadeIn();
+                        }
+                        else{
+                            $(elem).closest('li').fadeOut(function(){
+                                $(this).remove();
+                            });
+                        }
                     }
                 }
                 else{
@@ -352,7 +410,7 @@ $('.search').on('input', function () {
         });   
     });
     
-    $(document).on('click', '.thread-options-dropdown > ul > li:not(".rstoggle")', function(){
+$(document).on('click', '.thread-options-dropdown > ul > li:not(".rstoggle,.edit-toggle")', function(){
         var baseurl = $.trim($('#baseurl').val());
         var tid = $(this).closest('.thread').attr('data-tid');
         var opt = $(this).attr('data-opt');         
@@ -375,10 +433,22 @@ $('.search').on('input', function () {
             success: function(result){                
                 if(result.response !== "false"){
                     if(result.opt === 'delete_thread'){
-                        $(elem).closest('.thread').fadeOut(function(){
-                            $(elem).closest('.thread').remove();
-                            return;
-                        });
+                        if(window.location.href.split('/')[4] === 'Thread'){
+                            window.location.href = baseurl;
+                        }
+                        else{
+                            $(elem).closest('.thread').fadeOut(function(){
+                                $(elem).closest('.thread').remove();
+                                return;
+                            });
+                        }
+                    }
+                    if(result.opt === 'remove_from_list'){
+                        var title = $('.threadul').find('[data-tid="' + tid + '"] h3').text();
+                        $('<li class="jarl' + tid + '"><div class="pure-g"><div class="pure-u-1"><a href="' + baseurl + 'Readinglist/' + tid + '" style="display: block;"><p class="txt-left margin0"><small><b>' + title + '</b></small></p></a></div></div></li>').insertAfter('.readinglist-dropdown .headli');
+                    }
+                    if(result.opt === 'add_to_list'){
+                        $('.readinglist-dropdown').find('.jarl'+tid+'').remove();
                     }
                     if($(elem).hasClass('fg-green')){
                         $(elem).removeClass().addClass('bg-white fg-gray');
@@ -398,25 +468,29 @@ $('.search').on('input', function () {
     
     $('.mark-read').on('click',function(){
         var baseurl = $.trim($('#baseurl').val());
-        $.ajax({
-            type: 'post',
-            url: baseurl+'Ajax_Controller/mark_read',
-            cache: false,
-            beforeSend: function(){
-                $(this).parent().find('.loader').show();
-            },
-            success: function(){                
-                $(this).parent().find('.loader').hide();
-                $('.notifications-dropdown li').removeClass('active-notif');
-                if(screen.width < 480){
-                    $('.bubble-mobile').html('');
-                    $('.bubble-mobile-float').html('');
+        if($('.notifications-dropdown li').hasClass('active-notif')){
+            $.ajax({
+                type: 'post',
+                url: baseurl+'Ajax_Controller/mark_read',
+                cache: false,
+                beforeSend: function(){
+                    $(this).parent().find('.loader').show();
+                },
+                success: function(){                
+                    $(this).parent().find('.loader').hide();
+                    $('.notifications-dropdown li').removeClass('active-notif');
+                    if(screen.width < 480){
+                        $('.bubble-mobile').html('');
+                        $('.bubble-mobile-float').html('');
+                    }
+                    else{
+                        $('.bubble').html('');
+                    }
                 }
-                else{
-                    $('.bubble').html('');
-                }
-            }
-        });        
+            });  
+        }
+        else
+            return;
     });
     
     function waitForNotification (){
@@ -446,7 +520,8 @@ $('.search').on('input', function () {
                         else{
                             $('.beeper-wrapper > ul').show();
                             document.getElementById("beep").play();
-                            $('body').find('.beeper-wrapper > ul').append(result.content).fadeOut(8500);
+                            $('body').find('.beeper-wrapper > ul').append(result.content);
+                            $('.beeper-wrapper > ul > li:first').fadeOut(6000,function(){$(this).remove();});
                             document.title = "(" + result.cnt + ") New Notification";
                             var cnt = $('.bubble').html();
                             var cnt1 = parseInt(result.cnt);
@@ -475,9 +550,17 @@ $('.search').on('input', function () {
                }
                t = setTimeout(function(){
                     waitForNotification();
-               },1000);
+               },5000);
            }
         });
     };
+    (function () {
+        var baseurl = $('#baseurl').val();
+        var link = document.createElement('link');
+//        link.type = 'image/x-icon';
+        link.rel = 'shortcut icon';
+        link.href = baseurl+'assets/images/logo.png';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }());    
     waitForNotification();
 });

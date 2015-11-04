@@ -102,7 +102,7 @@ class Ajax_Controller extends CI_Controller{
     
     public function post_thread(){
         $data['title'] = $this->security->xss_clean($this->input->post('title'));
-        $data['desc'] = $this->security->xss_clean($this->input->post('desc'));
+        $data['desc'] = $this->input->post('desc');
         $data['filename'] = trim($this->input->post('filename'));
         $data['coordinates'] = trim($this->input->post('coordinates'));
         $data['category'] = $this->security->xss_clean($this->input->post('category'));
@@ -357,7 +357,7 @@ class Ajax_Controller extends CI_Controller{
     
     public function reply_thread(){
         $data['tid'] = $this->security->xss_clean($this->input->post('tid'));
-        $data['desc'] = $this->security->xss_clean($this->input->post('desc'));
+        $data['desc'] = $this->input->post('desc');
         $data['uid'] = $this->session->userdata('userid');
         $data['username'] = $this->session->userdata('username');
         $data['name'] = $this->session->userdata('fname') . ' ' . $this->session->userdata('lname');
@@ -718,5 +718,107 @@ class Ajax_Controller extends CI_Controller{
             $data = array('response'=>'true');
             echo json_encode($data);
         }
+    }
+
+    public function send_mail(){
+        $emailto = $this->security->xss_clean($this->input->post('emailto'));
+        $message = $this->security->xss_clean($this->input->post('msg'));
+        $config = Array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'dandekar.atharva@gmail.com', // change it to yours
+            'smtp_pass' => '', // change it to yours
+            'mailtype' => 'html',
+            'charset' => 'iso-8859-1',
+            'wordwrap' => TRUE
+        );
+        
+        $this->load->library('email', $config);
+        $this->email->set_newline("\r\n");
+        $this->email->from('dandekar.atharva@gmail.com'); // change it to yours
+        $this->email->to($emailto);// change it to yours
+        $this->email->subject('Soapbox Support Team');
+        $this->email->message($message);
+        if($this->email->send()){
+            $data = array('response'=>'true');
+        }
+        else{
+            $data = array('response'=>$this->email->print_debugger());
+        }
+        header('Access-Control-Allow-Origin: *');
+        header("Content-Type: application/json");
+        echo json_encode($data);
+    }
+
+    public function edit_thread(){
+        $data['tid'] = $this->security->xss_clean($this->input->post('tid'));
+        $data['title'] = $this->security->xss_clean($this->input->post('title'));
+        $data['desc'] = $this->security->xss_clean($this->input->post('desc'));
+        $data['coordinates'] = $this->security->xss_clean($this->input->post('coordinates'));
+        
+        $this->load->model('Ajax_model');
+        $this->Ajax_model->edit_thread($data);
+        $result = $this->Ajax_model->pull_t_desc($data);
+        if($result){
+            $data = array("response"=>"true","title"=>$result['title'],"desc"=>$result['description'],"coordinates"=>$result['coordinates']);
+        }
+        else{
+            $data = array("response"=>"false");
+        }
+        header('Access-Control-Allow-Origin: *');
+        header("Content-Type: application/json");
+        echo json_encode($data);
+    }
+    public function pull_t_desc(){
+        $data['tid'] = $this->security->xss_clean($this->input->post('tid'));        
+        
+        $this->load->model('Ajax_model');
+        $result = $this->Ajax_model->pull_t_desc($data);
+        if($result){
+            $data = array("response"=>"true","title"=>$result['title'],"desc"=>$result['description'],"coordinates"=>$result['coordinates']);
+        }
+        else{
+            $data = array("response"=>"false");
+        }
+        header('Access-Control-Allow-Origin: *');
+        header("Content-Type: application/json");
+        echo json_encode($data);
+    }
+    public function edit_history(){
+        $data['tid'] = $this->security->xss_clean($this->input->post('tid'));        
+        
+        $this->load->model('Ajax_model');
+        $result = $this->Ajax_model->edit_history($data);
+        if($result){
+            $data = array("response"=>"true","content"=>$result);
+        }
+        else{
+            $data = array("response"=>"false");
+        }
+        header('Access-Control-Allow-Origin: *');
+        header("Content-Type: application/json");
+        echo json_encode($data);
+    }
+    
+    public function autocomplete_tags(){
+        $data['key'] = $this->security->xss_clean($this->input->post('key'));
+        
+        $this->load->model('Ajax_model');
+        $result = $this->Ajax_model->autocomplete_tags($data);
+        $data = array("content"=>$result);
+        header('Access-Control-Allow-Origin: *');
+        header("Content-Type: application/json");
+        echo json_encode($data);
+    }
+    
+    public function get_real_views(){
+        $data['tid'] = $this->security->xss_clean($this->input->post('tid'));
+        $this->load->model('Ajax_model');
+        $result = $this->Ajax_model->get_real_views($data);
+        $data = array("response"=>"true", "content"=>$result);
+        header('Access-Control-Allow-Origin: *');
+        header("Content-Type: application/json");
+        echo json_encode($data);
     }
 }

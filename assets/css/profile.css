@@ -347,3 +347,13 @@ ul.timeline li > a > .content:before {
     left: 127px;
     z-index: 99;
 }
+.hdnul > li{
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(235,235,235,0.7);
+}
+.unhindebtn{
+    display: none;
+}
+.hdnul > li:hover .unhindebtn{
+    display: block;
+}

@@ -53,7 +53,6 @@
                                 <ul class="txt-center pstat">
                                     <li><span>Threads<br><?php echo $thread_count; ?></span></li>
                                     <li><span>Replies<br><?php echo $reply_count; ?></span></li>
-                                    <li><span>Followers<br>80</span></li>
                                 </ul>
                             </div>
                             <div class="pure-u-1 pcontent" style="padding: 20px 40px;">
@@ -218,6 +217,35 @@
                                                             if($timeline){
                                                                 echo $timeline;
                                                             }
+                                                        ?>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pure-u-1" style="padding: 0 20px 0 0px;">
+                                            <p class="featured-tags-title">Hidden Threads</p>
+                                            <div class="pure-g">
+                                                <div class="pure-u-1" style="padding: 10px 0px;">
+                                                    <ul class="hdnul">
+                                                        <?php
+                                                        if($get_hidden_threads){
+                                                            foreach($get_hidden_threads as $hdnthread){
+                                                                echo '<li>';
+                                                                echo '<div class="pure-g">';
+                                                                echo '<div class="pure-u-1-6 pure-u-md-1-12">';
+                                                                echo '<div class="avatar" style="background-image: url(' . base_url() . 'userdata/' .$hdnthread['uid'] .'/'. $hdnthread['avatarpath'] . ');"></div>';
+                                                                echo '</div>';
+                                                                echo '<div class="pure-u-5-6 pure-u-md-11-12">';
+                                                                echo '<i class="fa fa-times flt-right unhindebtn fg-gray pointer" title="Unhide thread" data-opt="unhide_thread" data-tid="' . $hdnthread['srno']  .'"></i>';
+                                                                echo '<p class="txt-left margin0" style=""><a href="' . base_url() . $hdnthread['username'] . '">' . $hdnthread['name'] . '</a> <br>' . $hdnthread['title'] .'</p>';
+                                                                echo '</div>';
+                                                                echo '</div>';
+                                                                echo '</li>';
+                                                            }
+                                                        }
+                                                        else{
+                                                            echo '<li><div class="pure-g"><div class="pure-u-1"><p class="margin0">No hidden threads</p></div></div></li>';
+                                                        }
                                                         ?>
                                                     </ul>
                                                 </div>

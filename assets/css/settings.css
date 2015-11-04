@@ -40,6 +40,12 @@
     padding: 5px;
     background: rgba(0,0,0,0.05) !important;
 }
+.delete-ac-input{
+    width: 100%;
+    padding: 5px;    
+    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 12pt;
+}
 ul.basic-info li{
     display: block;
     margin-bottom: 10px;
@@ -64,6 +70,10 @@ ul.basic-info li{
 .settings-save:active{
     background: #005499 !important;
 }
+.settings-save:disabled{
+    opacity: 0.4;
+    cursor: default;
+}
 .status-symbol{
     font-size: 11pt;
     padding-left: 15px;
@@ -74,4 +84,66 @@ ul.basic-info li{
 input[type='radio'], label{   
     vertical-align: baseline;
     margin: 5px;
- }
+}
+.modal-wrapper{
+    display: none;
+/*    background: rgba(63,63,68,.8);*/
+    background: rgb(255,255,255);
+    padding: 7px 10px;
+    position: fixed;
+    top:0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.modal-content {
+    border-radius: 4px;
+    margin: 40px auto;
+    height: auto;
+}
+.modal-content ul{
+    height: auto;
+    overflow: auto;
+}
+.pop-in{
+    -webkit-animation: scale-fade 300ms forwards cubic-bezier(.8, .02, .45, .91);
+    //-webkit-animation:pop-in 0.1s;
+    //-webkit-animation-timing-function: ease-in-out;
+    transform-origin: bottom center;
+}
+@-webkit-keyframes scale-fade{
+    0%{
+        opacity:0;
+        -webkit-transform:scale(.8) rotateX(-40deg);
+    }
+    50%{
+        opacity:1
+    }
+    70%{
+        -webkit-transform:scale(1.05) rotateX(0);
+    }
+    100%{
+        -webkit-transform:scale(1) rotateX(0);
+        }
+}
+@-webkit-keyframes pop-in {
+    0% { 
+        opacity: 0; -webkit-transform: scale(0.33); 
+    }
+    50%{
+        opacity: .5; -webkit-transform: scale(0.66); 
+    }
+    100% { 
+        opacity: 1; -webkit-transform: scale(1); 
+    }
+}
+.close-modal > i:hover{
+    color: #333 !important;
+}
+.delete-ac{
+    background: #e51400 !important;
+    border-color: #990d00 !important;
+}
+.delete-ac:active{
+    background: #990d00 !important;
+}

@@ -148,6 +148,9 @@ table, th, td{
 /*blockquote:before, blockquote:after, q:before, q:after{
     content:'';
 }*/
+.editable blockquote:before,.editable-thread blockquote:before,.editable blockquote:after,.editable-thread blockquote:after{
+    content: '';
+}
 blockquote:before{
     content: '“'
 }
@@ -419,16 +422,15 @@ blockquote {
     border-left: 5px #000 solid;
     font-style:italic !important;*/
     font-weight: 400;
-    border-left: 3px #000 solid;
     font-style: italic;
     font-size: 28px !important;
     line-height: 1.48;
     letter-spacing: -0.014em;
-    margin: 5px 0 15px 20px;
+    margin: 5px 0 15px 0px;
     color: rgba(0,0,0,0.6);
     //border: none;
     padding: 0;
-    padding-left: 20px;
+    padding-left: 0px;
     text-align: left;
 }
 blockquote span{
@@ -1299,23 +1301,33 @@ ul.nav-dropdown:after{
     padding: 0 10px;
 }
 .editable p,.thread-desc p{
-    margin: 3px 0 5px 0;
+    margin: 3px 0 5px 0 !important;
 }
 .editable span,.editable p,.editable li,.thread-desc span,.thread-desc p,.thread-desc li{
     font-family: 'Merriweather' !important;
 }
 .editable b,.thread-desc b{
     font-family: 'Merriweather Bold' !important;
+    font-size: inherit !important;
 }
 .editable i,.thread-desc i{
     font-family: 'Merriweather Italic' !important;
+    font-size: inherit !important;
+}
+.editable .relative > i,.thread-desc .relative > i{
+    font-family: 'FontAwesome' !important;
 }
 .editable b > i,.editable i > b,.thread-desc b > i,.thread-desc i > b{
     font-family: 'Merriweather Bold Italic' !important;
+    font-size: inherit !important;
 }
 .editable:empty:not(:focus):before{
     content:attr(data-text);
     color: #ccc;
+}
+.editable pre p,.thread-desc pre p{
+    font-family: monospace !important;
+    color: #48d8a0 !important;
 }
 .editable pre,.thread-desc pre{
 /*    color: rgb(188,0,13);
@@ -1326,13 +1338,13 @@ ul.nav-dropdown:after{
     background: #272b38;
     color: #48d8a0;
     border-radius: 4px;*/
-    //background: #f5f2f0;
+/*    background: #f5f2f0;*/
     background: #272b38;
-    padding: 1em;
+    padding: 0.5em 1em;
     margin: .5em 0;
     overflow: auto;
-    color: #48d8a0;
-    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    color: #48d8a0 !important;
+    font-family: monospace !important;
     direction: ltr;
     text-align: left;
     white-space: pre;
@@ -1348,12 +1360,53 @@ ul.nav-dropdown:after{
     -ms-hyphens: none;
     hyphens: none;
 }
+.editable h4 > ol,.thread-desc h4 > ol,.editable h4 > ul,.thread-desc h4 > ul{
+    margin-left: 45px !important;
+}
+.editable h5 > ol,.thread-desc h5 > ol,.editable h5 > ul,.thread-desc h5 > ul{
+    margin-left: 35px !important;
+}
+.editable h6 > ol,.thread-desc h6 > ol,.editable h6 > ul,.thread-desc h6 > ul{
+    margin-left: 25px !important;
+}
+.editable span{
+    font-family: 'Merriweather' !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+.editable h3,.editable h4,.editable h5,.editable h6,.thread-desc h3,.thread-desc h4,.thread-desc h5,.thread-desc h6{
+    font-family: 'Merriweather' !important;
+    color: rgba(0,0,0,0.5);
+}
+.editable h3 span,.editable h4 span,.editable h5 span,.editable h6 span,.thread-desc h3 span,.thread-desc h4 span,.thread-desc h5 span,.thread-desc h6 span{
+    font-family: 'Merriweather' !important;
+    color: rgba(0,0,0,0.4) !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+.editable h3,.thread-desc h3{
+    font-size: 24pt !important;
+}
+.editable h4,.thread-desc h4{
+    font-size: 20pt !important;
+}
+.editable h5,.thread-desc h5{
+    font-size: 16pt !important;
+}
+.editable h6,.thread-desc h6{
+    font-size: 12pt !important;
+}
 .editable ul,.thread-desc ul{
     list-style-type: disc !important;
     margin-left: 20px;
 }
-.editable ul li, .thread-desc ul li{
-    display:list-item;
+.editable ol,.thread-desc ol{
+    list-style-type: decimal !important; 
+    margin-left: 30px;
+}
+.editable ol > li,.thread-desc ol > li{
+    display: list-item !important;
 }
 .thread{
     margin-top: 10px;
@@ -1666,7 +1719,7 @@ li.thread:last-child{
 }
 .beeper{
     padding: 10px;    
-    background-color: #3290E2;
+    background-color: #1d7ccf;
 /*    background-image: -moz-linear-gradient(center top, #52aeff 45%, #2180d3 80%);
     background-image: -webkit-gradient(linear, right bottom, left bottom, from(#52aeff), to(#2180d3));*/
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.32);
@@ -1712,4 +1765,14 @@ li.thread:last-child{
 }
 .active-notif{
     background:rgba(235,235,235,.8);
+}
+.relative{
+    position: relative;
+}
+.remove-desc-image{
+    font-family:'FontAwesome' !important;
+    position: absolute;
+    left: 10px;
+    top:10px;
+    cursor: pointer;
 }

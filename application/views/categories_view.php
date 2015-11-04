@@ -31,6 +31,12 @@
                         //echo '<div class="category-defocus" style="background: linear-gradient(45deg,#46bddb 20%,#4889f8 40%,#9372bf 100%)"></div>';
                         echo '<div class="category-defocus" style="background: rgba(0,0,0,0.9);"></div>';
                         echo '<h5 class="category-title fg-white txt-center"><i class="fa fa-check-circle"></i> ' . $category['name'] . '</h5>';
+                        if($category['count']==1){
+                            echo '<p class="txt-center fg-white">' . $category['count'] . ' thread</p>';
+                        }
+                        else{
+                            echo '<p class="txt-center fg-white">' . $category['count'] . ' threads</p>';
+                        }
                         $string.= $category['srno'] . ',';
                     }
                     else{
@@ -38,6 +44,12 @@
                         echo '<div class="category-bg" style="background-image: url(\'' .  asset_url() . $category['imagepath'] . '\');"></div>';
                         echo '<div class="category-defocus"></div>';
                         echo '<h5 class="category-title fg-white hidden txt-center"><i class="fa fa-check-circle hidden"></i> ' . $category['name'] . '</h5>';
+                        if($category['count']==1){
+                            echo '<p class="txt-center fg-white hidden">' . $category['count'] . ' thread</p>';
+                        }
+                        else{
+                            echo '<p class="txt-center fg-white hidden">' . $category['count'] . ' threads</p>';
+                        }
                     }
                     echo '</div>';
                 }

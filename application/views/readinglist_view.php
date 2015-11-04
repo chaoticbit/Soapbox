@@ -86,6 +86,7 @@
                                 echo '<div class="pure-u-1 thread-desc">';
                                 $desc = str_replace('<;','&lt;',$thread['description']);
                                 $desc = str_replace('>;','&gt;',$desc);
+                                $desc = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $desc);
                                 echo $desc;
                                 echo '</div>';
                                 if ($thread['tags']) {

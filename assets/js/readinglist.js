@@ -3,6 +3,9 @@ $(document).ready(function(){
       var baseurl = $('#baseurl').val();
       var tid = $(this).attr('data-tid') ;
       var ele = $(this);
+      if($(this).hasClass('active')){
+          return;
+      }
       $.ajax({
             type: 'post',
             url: baseurl + 'Ajax_Controller/fetch_list_thread',

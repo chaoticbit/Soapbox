@@ -13,7 +13,7 @@ class Thread_model extends CI_Model{
         $this->db->query("UPDATE notifications SET readflag=1 WHERE ref = " . (int)$data . " and uid = " . (int)$userid . "");
     }
     public function fetch_thread($data){
-        $query = $this->db->query("SELECT useraccounts.username, CONCAT(extendedinfo.fname, ' ', extendedinfo.lname) as name, extendedinfo.avatarpath, thread.srno, thread.timestamp, thread.title, thread.imagepath, thread.coordinates, thread.description, thread.uid, category.name as cname FROM thread, category, extendedinfo, useraccounts WHERE thread.uid=extendedinfo.uid AND category.srno=thread.cid AND useraccounts.srno=thread.uid AND thread.srno=" . (int)$data);
+        $query = $this->db->query("SELECT useraccounts.username, CONCAT(extendedinfo.fname, ' ', extendedinfo.lname) as name, extendedinfo.avatarpath, thread.srno, thread.timestamp, thread.title, thread.imagepath, thread.coordinates, thread.description, thread.uid, thread.edit, category.name as cname FROM thread, category, extendedinfo, useraccounts WHERE thread.uid=extendedinfo.uid AND category.srno=thread.cid AND useraccounts.srno=thread.uid AND thread.srno=" . (int)$data);
         if($query->num_rows() > 0){
             $result = $query->row_array();           
             $query_ = $this->db->query("SELECT thread_tags.name FROM thread_tags WHERE tid=" . (int)$result['srno']);
@@ -54,7 +54,7 @@ class Thread_model extends CI_Model{
     }
     
     public function fetch_replies($data){
-        $query = $this->db->query("SELECT CONCAT(extendedinfo.fname, ' ', extendedinfo.lname) as name, extendedinfo.avatarpath, reply.srno, reply.description, reply.timestamp, reply.correct, reply.uid FROM extendedinfo, reply WHERE reply.uid=extendedinfo.uid AND reply.tid=" . (int)$data);
+        $query = $this->db->query("SELECT useraccounts.username, CONCAT(extendedinfo.fname, ' ', extendedinfo.lname) as name, extendedinfo.avatarpath, reply.srno, reply.description, reply.timestamp, reply.correct, reply.uid FROM useraccounts, extendedinfo, reply WHERE useraccounts.srno=extendedinfo.uid AND reply.uid=extendedinfo.uid AND reply.tid=" . (int)$data . " ORDER BY reply.correct DESC");
         if($query->num_rows() > 0){
             $result = $query->result_array();
             for($i=0;$i<count($result);$i++){

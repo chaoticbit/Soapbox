@@ -105,27 +105,27 @@
                     <div class="padded-subcontainer step-2" style="display: none;">
                         <div class="pure-g">
                             <div class="pure-u-1 pure-u-md-1-2" style="padding: 0 5px 0 5px;position: relative;">
-                                <input type="text" placeholder="hometown" autofocus autocomplete="Off" class="txt-hometown" tabindex="7" spellcheck="false" autocorrect="off" autocomplete="off" />
+                                <input type="text" placeholder="hometown" autofocus autocomplete="Off" class="txt-hometown" tabindex="7" maxlength="30" spellcheck="false" autocorrect="off" autocomplete="off" />
                                 <span class="status-symbol"><i></i></span>
                             </div>
                             <div class="pure-u-1 pure-u-md-1-2" style="padding: 0 5px 0 5px;position: relative;">
-                                <input type="text" placeholder="current city" autocomplete="Off" class="txt-city" tabindex="8" spellcheck="false" autocorrect="off" autocomplete="off" />
+                                <input type="text" placeholder="current city" autocomplete="Off" class="txt-city" tabindex="8" maxlength="30" spellcheck="false" autocorrect="off" autocomplete="off" />
                                 <span class="status-symbol"><i></i></span>
                             </div>              
                             <div class="pure-u-1 pure-u-md-1-2" style="padding: 0 5px 0 5px;position: relative;">
-                                <input type="text" placeholder="profession" autocomplete="Off" class="txt-profession" tabindex="9" spellcheck="false" autocorrect="off" autocomplete="off" />
+                                <input type="text" placeholder="profession" autocomplete="Off" class="txt-profession" tabindex="9" maxlength="30" spellcheck="false" autocorrect="off" autocomplete="off" />
                                 <span class="status-symbol"><i></i></span>
                             </div>
                             <div class="pure-u-1 pure-u-md-1-2" style="padding: 0 5px 0 5px;position: relative;">
-                                <input type="text" placeholder="education" autocomplete="Off" class="txt-education" tabindex="10" spellcheck="false" autocorrect="off" autocomplete="off" />
+                                <input type="text" placeholder="education" autocomplete="Off" class="txt-education" tabindex="10" maxlength="30" spellcheck="false" autocorrect="off" autocomplete="off" />
                                 <span class="status-symbol"><i></i></span>
                             </div>
                             <div class="pure-u-1 pure-u-md-1-2" style="padding: 0 5px 0 5px;position: relative;">
-                                <input type="text" placeholder="college" autocomplete="Off" class="txt-college" tabindex="11" spellcheck="false" autocorrect="off" autocomplete="off" />
+                                <input type="text" placeholder="college" autocomplete="Off" class="txt-college" tabindex="11" maxlength="30" spellcheck="false" autocorrect="off" autocomplete="off" />
                                 <span class="status-symbol"><i></i></span>
                             </div>
                             <div class="pure-u-1 pure-u-md-1-2" style="padding: 0 5px 0 5px;position: relative;">
-                                <input type="text" placeholder="school" autocomplete="Off" class="txt-school" tabindex="12" spellcheck="false" autocorrect="off" autocomplete="off" />
+                                <input type="text" placeholder="school" autocomplete="Off" class="txt-school" tabindex="12" maxlength="30" spellcheck="false" autocorrect="off" autocomplete="off" />
                                 <span class="status-symbol"><i></i></span>
                             </div>
                             <div class="pure-u-1-2" style="padding: 0 5px 0 5px;">
@@ -140,20 +140,29 @@
                     <!-- STEP 3 -->
                     <div class="padded-subcontainer step-3" style="display: none;">
                         <div class="pure-g" style="max-height: 280px;overflow-y: auto;">
-                        <?php
-                        foreach($categories as $category){
-                            echo '<div class="pure-u-1 pure-u-md-1-4 category">';
-                            echo '<div class="background" style="background-image: url(' . asset_url() . $category->imagepath . ');">';
-                            echo '<div class="defocus-panel">';
-                            echo '<i class="fa fa-check-circle fa-3x fg-white margin0 center-icon"></i>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '<div class="title bg-steel">';
-                            echo '<p class="margin0 txt-center bold fg-white category-name" data-cid="' . $category->srno . '">' . $category->name . '</p>';
-                            echo '</div>';
-                            echo '</div>';                            
-                        }
-                        ?>
+                            <div class="pure-u-1">
+                                <p class="margin0 txt-right"><a href="javascript:;" class="select-all"><i class="fa fa-check"></i> Select all categories</a></p>
+                                <?php
+                                foreach($categories as $category){
+                                    echo '<div class="pure-u-1 pure-u-md-1-4 category">';
+                                    echo '<div class="background" style="background-image: url(' . asset_url() . $category['imagepath'] . ');">';
+                                    echo '<div class="defocus-panel">';
+                                    echo '<i class="fa fa-check-circle fa-3x fg-white margin0 center-icon"></i>';
+                                    echo '</div>';
+                                    echo '</div>';
+                                    echo '<div class="title bg-steel">';
+                                    echo '<p class="margin0 txt-center bold fg-white category-name" data-cid="' . $category['srno'] . '">' . $category['name'] . '</p>';
+                                    if($category['count']==1){
+                                        echo '<p class="txt-center fg-white margin0"><small>' . $category['count'] . ' thread</small></p>';
+                                    }   
+                                    else{
+                                        echo '<p class="txt-center fg-white margin0"><small>' . $category['count'] . ' threads</small></p>';
+                                    }
+                                    echo '</div>';
+                                    echo '</div>';                            
+                                }
+                                ?>
+                            </div>
                         </div>
                         <div class="pure-g">
                             <div class="pure-u-1-2" style="padding: 0 5px 0 5px;">
@@ -180,7 +189,7 @@
                                 <button class="step-btn step-btn-4 bg-cyan fg-white back flt-left" style="width: auto;">BACK</button>
                             </div>
                             <div class="pure-u-1-2" style="padding: 0 5px 0 5px;">
-                                <button class="step-btn step-btn-4 bg-cyan fg-white next flt-right" style="width: auto;" onclick="$('.signupdetailsform').submit();">DONE</button>
+                                <button class="step-btn step-btn-4 bg-cyan fg-white next flt-right" style="width: auto;" onclick="$('.signupdetailsform').submit();$(this).attr('disabled','disabled');">DONE</button>
                             </div>
                         </div>
                     </div>

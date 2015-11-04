@@ -4,7 +4,14 @@ class Signup_model extends CI_Model{
     public function get_categories(){
         $query = $this->db->query("SELECT * FROM category");
         if($query->num_rows()>0){
-            return $query->result();
+            $result = $query->result_array();
+            
+            for($i=0;$i<count($result);$i++){
+                $query_= $this->db->query("SELECT COUNT(*) as count FROM thread WHERE cid=" . (int)$result[$i]['srno']);
+                $result_= $query_->row_array();
+                $result[$i]['count'] = $result_['count'];
+            }
+            return $result;
         }
         return false;
     }

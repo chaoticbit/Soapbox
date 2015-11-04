@@ -69,7 +69,9 @@ li.thread:last-child{
 .reply-desc *{
     font-size: 11pt !important;
 }
-
+.thread-desc img{
+    cursor: -webkit-zoom-in;
+}
 .dropdown.thread-options-dropdown {
     position: absolute;
     display: block;
@@ -310,16 +312,60 @@ img.theatre-photo {
 }
 .modal-content ul{
     height: auto;
-    max-height: 264px;
     overflow: auto;
 }
 .modal-content ul > li{
     display: block;
     padding: 15px 10px;
 }
+.modal-content-history ul > li{
+    display: inline-block !important;
+}
 .modal-content ul > li > a{
     display: block;
 }
 .modal-content ul > li:hover{
     background: rgba(0,0,0,0.03);
+}
+.modal-content-history ul > li:hover{
+    background: none !important;
+}
+/*edit*/
+.thread-title-input {
+    padding: 5px 0;
+    border: none;
+    border-bottom: 1px solid rgba(235,235,235,0.5);
+    font-family: 'Open Sans Black' !important;
+    letter-spacing: 0.00em;
+    width: 100%;
+    font-weight: 300;
+    color: rgba(0,0,0,0.8);
+    font-size: 24pt;
+    line-height: 28pt;
+}
+.editableon{
+    box-shadow: 0px 0px 10px 2px rgba(63,63,63,0.4);
+    border-radius: 3px;
+    transition: all 0.2s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+}
+.thread-edit-save,.cancel-edit-thread{
+    padding: 5px 12px;
+    display: inline-block;
+    border-radius: 5px;
+    margin: auto !important;
+    font-size: 14px;
+}
+.reposition{
+    cursor: -webkit-grabbing !important;
+}
+del {
+    text-decoration: none;
+    background: rgba(245,0,0,0.1) !important;
+    display: block;
+}
+ins {
+    text-decoration: none;
+    background: rgba(0,245,0,0.2) !important;
+    display: block;
 }

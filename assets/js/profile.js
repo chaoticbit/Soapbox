@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    
     $(function () {
         var prevScroll = 0,
                 curDir = 'down',
@@ -242,14 +243,15 @@ $(document).ready(function(){
                 },
                 success: function(result){
                     if(result.response === "true"){
-                        window.globalDraftFlag = false;
-                        $('.save-cover').hide();
-                        $('.cancel-cover').hide();
-                        $('.change-cover').show();
-                        $(".bg-img").on('mousedown mouseup', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        });
+                        location.reload();
+//                        window.globalDraftFlag = false;
+//                        $('.save-cover').hide();
+//                        $('.cancel-cover').hide();
+//                        $('.change-cover').show();
+//                        $(".bg-img").on('mousedown mouseup', function (e) {
+//                            e.preventDefault();
+//                            e.stopPropagation();
+//                        });
                     }
                 }
             });

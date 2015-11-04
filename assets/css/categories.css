@@ -40,6 +40,12 @@
 .category h5{
     width: 100%;
 }
+.category p{
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 .cmul > li{
     display: block;
     overflow: auto;

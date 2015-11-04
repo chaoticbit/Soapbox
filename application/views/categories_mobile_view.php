@@ -32,11 +32,11 @@
                         echo '<p class="txt-left margin0">' . $category['name'] . ' ';
                         if($category['uid']==$userid){
                             echo '<i class="fa fa-check fg-green"></i></p>';
-                            echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Unfollow">Unfollow</a></p>';
+                            echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Unfollow">Unfollow</a> <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                         }
                         else{
                             echo '<i></i></p>';
-                            echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Follow">Follow</a></p>';
+                            echo '<p class="txt-left margin0"><a href="javascript:;" class="update-cat" data-id="' . $category['srno'] . '" data-action="Follow">Follow</a> <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>';
                         }
                         echo '</div>';
                         echo '</div>';

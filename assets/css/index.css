@@ -168,17 +168,23 @@ button:active{
     height: auto;
     max-height: 200px;
 }
-.dropdown.thread-options-dropdown {
+.dropdown.thread-options-dropdown,.dropdown.tag-autocomplete-dropdown{
     position: absolute;
     display: block;
     width: 175px;
     box-shadow: 0 0 10px rgba(0,0,0,0.4);
     background: #fff;
 }
-.dropdown.thread-options-dropdown > ul > li{
+.dropdown.tag-autocomplete-dropdown{
+    box-shadow: 0 0 5px rgba(0,0,0,0.4);
+    margin-top: 2px;
+    max-height: 250px;
+    overflow: auto;
+}
+.dropdown.thread-options-dropdown > ul > li,.dropdown.tag-autocomplete-dropdown > ul > li{
     display: block !important;
 }
-.dropdown.thread-options-dropdown > ul > li > a {
+.dropdown.thread-options-dropdown > ul > li > a ,.dropdown.tag-autocomplete-dropdown > ul > li > a{
     padding: 5px 7px 5px 13px;
     color: inherit !important;
     font-size: 10pt;
@@ -188,7 +194,12 @@ button:active{
     -webkit-transition: all 0.2s ease-in-out;
     -moz-transition: all 0.2s ease-in-out;    
 }
-.dropdown.thread-options-dropdown > ul > li > a:hover{
+.dropdown.tag-autocomplete-dropdown > ul > li > a{
+    padding: 7px 5px 7px 13px;
+    font-family: 'Open Sans';
+    color: #333 !important;
+}
+.dropdown.thread-options-dropdown > ul > li > a:hover,.dropdown.tag-autocomplete-dropdown > ul > li > a:hover{
     background: rgba(235,235,235,0.7);
 }
 .load-more{
@@ -373,4 +384,16 @@ small .dot:nth-child(3){
 }
 .notificationli > a{
     display: block;
+}
+.upload_image_toggle{
+    color: rgba(0,0,0,0.2);
+    transition: all 2s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+}
+.upload_image_toggle:hover{
+    color: rgba(0,0,0,0.4);
+}
+.tilt{
+    transform: rotate(45deg);
 }

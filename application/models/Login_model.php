@@ -50,7 +50,7 @@ class Login_model extends CI_Model {
     }
     
     public function new_fb_user($data){
-        $this->db->query("INSERT INTO useraccounts(username, password) VALUES('" . $data['username'] . "', '" . $data['password'] . "')");
+        $this->db->query("INSERT INTO useraccounts(username, password) VALUES('" . strtolower($data['username']) . "', '" . $data['password'] . "')");
         $query = $this->db->query("SELECT srno FROM useraccounts WHERE username='" . $data['username'] . "'");
         if($query->num_rows()>0){
             $result = $query->row_array();

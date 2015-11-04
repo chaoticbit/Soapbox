@@ -57,7 +57,7 @@
                         <div class="tips tips-username" style="display: none;">
                             <i class="fa fa-caret-right fa-2x fg-lightBlue right-caret" style="top: 8px;"></i>
                             <div class="bg-lightBlue tip" style="top: -5px;">
-                                <p class="fg-white bold txt-center margin0" style="font-size: 10pt;">Cannot start with a number or any special character.</p>
+                                <p class="fg-white bold txt-center margin0" style="font-size: 10pt;">Cannot start with a number or any special character.<br>A-Z 0-9 _ and . are allowed.</p>
                             </div>
                         </div>
                         <div class="tips tips-password" style="display: none;">
@@ -91,7 +91,7 @@
                         <p class="light txt-justify" style="margin-top: 15px;">We made it really, really simple for people to ask any question and get answers from real people with first-hand experience.</p>
                         <p class="bold">You already know how this works</p>
                         <p class="light txt-justify">Choose from the topics of your interest to create a feed of information tuned to your interests. Create a thread to share knowledge.</p>
-                        <?php echo '<a href="' . $login_url . '"><button class="btn-general fg-white" style="border-color:#3b5988;margin-top: 5px;background: #3b5988;">LOGIN WITH FACEBOOK</button></a>'; ?>
+                        <?php echo '<a href="' . $login_url . '"><button class="btn-general fg-white" style="border-color:#3b5988;margin-top: 5px;background: #3b5988;">LOGIN USING FACEBOOK</button></a>'; ?>
                     </div>
                 </div>
             </div>

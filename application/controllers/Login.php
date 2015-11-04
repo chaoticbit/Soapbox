@@ -3,21 +3,31 @@ class Login extends CI_Controller {
     
     public $user = "";
     public $facebook;
-    
-    public function index(){
-        if(is_logged_in()){
-            redirect(base_url(),'location');
-        }
+
+    function __construct() {
+        parent::__construct();
         require_once APPPATH . 'libraries/facebook.php';
         $this->facebook = new Facebook(array(
             'appId'  => '897606013651344',
             'secret' => '090d9a500426f917f70c708a67b20d44',
         ));
-        $this->user = $this->facebook->getUser();        
+        $this->user = $this->facebook->getUser();
+    }
+
+    public function index(){
+        if(is_logged_in()){
+            redirect(base_url(),'location');
+        }
+//        require_once APPPATH . 'libraries/facebook.php';
+//        $this->facebook = new Facebook(array(
+//            'appId'  => '897606013651344',
+//            'secret' => '090d9a500426f917f70c708a67b20d44',
+//        ));
+//        $this->user = $this->facebook->getUser();        
         if ($this->user) {
             $access_token = $this->facebook->getAccessToken();
             $param_token = array('access_token' => $access_token);
-            $data['user_profile'] = $this->facebook->api('/me?fields=name,first_name,last_name,gender,link,email','GET',$param_token);
+            $data['user_profile'] = $this->facebook->api('/me?fields=name,first_name,last_name,gender,link,email,cover','GET',$param_token);
             $data['logout_url'] = $this->facebook->getLogoutUrl(array('next' => base_url() . 'Logout'));
             $this->load->model('Login_model');
             $result = $this->Login_model->is_user_from_fb($data['user_profile']['email']);
@@ -35,10 +45,10 @@ class Login extends CI_Controller {
                     $username = substr($username, 0, 25);                    
                 }
                 $password = randomStr();
-                $user['username'] = $username;
+                $user['username'] = strtolower($username);
                 $user['password'] = md5($password);
-                $user['fname'] = $data['user_profile']['first_name'];
-                $user['lname'] = $data['user_profile']['last_name'];
+                $user['fname'] = ucfirst($data['user_profile']['first_name']);
+                $user['lname'] = ucfirst($data['user_profile']['last_name']);
                 $user['gender'] = $data['user_profile']['gender'];
                 $user['avatarpath'] = 'https://graph.facebook.com/' . $data['user_profile']['id'] . '/picture?type=large';
                 $user['email'] = $data['user_profile']['email'];
@@ -58,6 +68,7 @@ class Login extends CI_Controller {
         }
     }
     public function process() {
+        $data['login_url'] = $this->facebook->getLoginUrl(array('scope' => 'email'));
         $this->load->model('Login_model');
         $username = $this->security->xss_clean($this->input->post('uname'));
         $password = $this->security->xss_clean($this->input->post('pword'));
@@ -91,8 +102,8 @@ class Login extends CI_Controller {
             $srno = $this->Login_model->signup($nusername, $npassword);
             $newdata = array("userid"=>$srno,"username"=>$nusername);
             $this->session->set_userdata($newdata);
-            mkdir("userdata/" . $this->session->userdata('userid'), 0700, true);
-            chmod("userdata/" . $this->session->userdata('userid'), 0777);
+            mkdir(FCPATH . "userdata/" . $this->session->userdata('userid'), 0700, true);
+            chmod(FCPATH . "userdata/" . $this->session->userdata('userid'), 0777);
             redirect('Signup', 'location');
         }
         else{

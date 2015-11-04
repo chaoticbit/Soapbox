@@ -56,6 +56,9 @@ class Signup extends CI_Controller{
         
         $this->load->model('Signup_model');
         $this->Signup_model->populate($data);
-        redirect(base_url() . 'Logout', 'location');
+        $this->session->set_userdata('fname', $data['fname']);
+        $this->session->set_userdata('lname', $data['lname']);
+        $this->session->set_userdata('avatarpath', $data['imagepath']);
+        redirect(base_url(), 'location');
     }
 }
