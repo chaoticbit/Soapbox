@@ -1,13 +1,14 @@
+            <input type="hidden" class="hdnUserId" value="<?php echo $userid; ?>" />
             <input type="hidden" name="asset-url" value="<?php echo asset_url(); ?>" />
             <input type="hidden" id="baseurl" value="<?php echo base_url(); ?>" />
-            <nav class="headbar pure-u-1" style="z-index: 999999;box-shadow: 0 1px 2px 0px rgba(0, 0, 0, .52);">
+            <nav class="headbar pure-u-1" style="z-index: 999999;box-shadow: 0 1px 0px 0px rgba(0, 0, 0, .1);">
                 <div class="pure-g">
                     <div class="pure-u-1-5 logo" style="background-image: url('<?php echo asset_url(); ?>images/logo.png');">
-                        <h5 class="fg-white light pointer noselect" onclick="window.location.href='<?php echo base_url(); ?>';">Soapbox</h5>
+                        <h5 class="fg-black pointer noselect" onclick="window.location.href='<?php echo base_url(); ?>';">Soapbox</h5>
                     </div>
                     <div class="pure-u-1 pure-u-md-4-5 md45-headbar">
                         <div class="pure-g">
-                            <div class="pure-u-1 pure-u-md-1-2" style="padding-top: 12px;position: relative;">
+                            <div class="pure-u-1 pure-u-md-1-2" style="padding-top: 9px;position: relative;">
                                 <!-- <a href="javascript:;" class="toggle-sidebar flt-left"><i class="fa fa-navicon fg-white"></i></a> -->
                                 <a id="trigger-overlay" class="toggle-sidebar nav-toggle flt-left" aria-expanded="false" href="javascript:;"><span></span></a>
                                 <input type="text" class="search" tabindex="-1" placeholder="Search Soapbox" autocomplete="off" autocorrect="off" spellcheck="false" />
@@ -225,11 +226,11 @@
                     </div>
                 </div>
             </nav>
-            <nav class="headbar-mobile pure-u-1" style="z-index: 999999;box-shadow: 0 1px 2px 0px rgba(0, 0, 0, .52);">
+            <nav class="headbar-mobile pure-u-1" style="z-index: 999999;box-shadow: 0 1px 2px 0px rgba(0, 0, 0, .2);">
                 <span class="bubble-mobile"><?php if($nocount != '0') { echo $nocount; } else { echo '';} ?></span>
                 <a class="toggle-sidebar nav-toggle flt-left" style="width: 10%;padding: 25px 15px;" aria-expanded="false" href="javascript:;"><span></span></a>                    
-                <span class="flt-left fg-white txt-center" style="width: 80%;line-height: 50px;font-size: 21px;padding: 0px;"><span onclick="window.location.href ='<?php echo base_url(); ?>'">Soapbox</span></span>
-                <a class="flt-left pointer txt-left" style="width: 10%;" href="<?php echo base_url();?>Search/refms1"><i class="fa fa-search fg-white fa-fw" style="line-height: 45px;padding: 1px 0px 1px 0;font-size: 21px;"></i></a>                    
+                <span class="flt-left fg-black txt-center" style="width: 80%;line-height: 50px;font-size: 21px;padding: 0px;"><span onclick="window.location.href ='<?php echo base_url(); ?>'">Soapbox</span></span>
+                <a class="flt-left pointer txt-left" style="width: 10%;" href="<?php echo base_url();?>Search/refms1"><i class="fa fa-search fg-black fa-fw" style="line-height: 45px;padding: 1px 0px 1px 0;font-size: 21px;"></i></a>                    
             </nav>            
             <div class="sidebarwrapper">
                 <div class="sidebar">

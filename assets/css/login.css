@@ -63,6 +63,7 @@ ul.navbar > li > a:hover{
 .subtitle{
     text-align: center;
     letter-spacing: 7px;
+    text-indent: 7px;
     font-size: 90%;
     text-transform: uppercase;
 }

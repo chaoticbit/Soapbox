@@ -5,7 +5,7 @@ $(document).ready(function () {
     var is_explorer = navigator.userAgent.indexOf('MSIE') > -1;
     var is_firefox = navigator.userAgent.indexOf('Firefox') > -1;
     var is_safari = navigator.userAgent.indexOf("Safari") > -1;
-    if ((is_chrome)&&(is_safari)) {is_safari=false;}    
+    if ((is_chrome)&&(is_safari)) {is_safari=false;}
     askConfirm = function() {
         if(window.globalDraftFlag) {
             return "You haven't finished your post yet. Do you want to leave without finishing?";
@@ -19,10 +19,10 @@ $(document).ready(function () {
         };
     }
     else{
-        window.onbeforeunload = askConfirm; 
+        window.onbeforeunload = askConfirm;
     }
-    
-    //addDNDListener(document.getElementById('editable'));    
+
+    //addDNDListener(document.getElementById('editable'));
     if (screen.width < 480) {
         $('blockquote').css('margin','0');
     }
@@ -31,16 +31,16 @@ $(document).ready(function () {
         $(this).find('a').attr('target','_blank');
         var tid = $(this).closest('.thread').attr('data-tid');
         var baseurl = $.trim($('#baseurl').val());
-        th = $(this).height();    
+        th = $(this).height();
         var elem = $(this);
         if(th >= '200'){
             $('<div class="pure-u-1">\n\
                <p><a href="'+baseurl+'Thread/'+tid+'">Read more</a></p>\n\
-               </div>').insertAfter(elem); 
+               </div>').insertAfter(elem);
         }
     });
-    
-    
+
+
     var editor = new MediumEditor('.editable', {
         placeholder:false,
         imageDragging: false,
@@ -60,10 +60,10 @@ $(document).ready(function () {
     });
     $('.toggle-editor').click(function(){
         $(this).closest('.new-thread-button').slideUp();
-        $('.editable-wrapper').slideDown();        
+        $('.editable-wrapper').slideDown();
         $('.editable-wrapper').find('.thread-title-input').focus();
-    });   
-    
+    });
+
     $('.thread-title-input').bind('input',function(){
         if($(this).val().length > 1){
             window.globalDraftFlag = true;
@@ -90,15 +90,15 @@ $(document).ready(function () {
             $('.tags').val('');
             $('.tags').attr('data-cnt','0');
             $('.dupfilename').val('');
-            $('.tag-input-div .tag').remove();  
+            $('.tag-input-div .tag').remove();
             $('.thread-image-preview').css('background','');
             $('.thread-image-preview').css('display', 'none');
-        });    
+        });
         window.globalDraftFlag = false;
-    }); 
-    
+    });
+
     /*UPLOAD IMAGE*/
-    
+
     $(document).on('click', '.upload_image_toggle', function(){
         $('.thread-image').click();
     });
@@ -107,25 +107,25 @@ $(document).ready(function () {
         var w = $('.image-upload-progress').parent().width();
         $('.image-upload-progress').css('width',w +'px');
         uploadFile();
-    }); 
-    
+    });
+
     $('.upload_descimage_toggle').click(function(){
         $('.desc-image').click();
     });
     $('.desc-image').change(function(){
         uploadImages();
-    });  
-    
+    });
+
     function regex_escape(str) {
         return str.replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:;\\-\']', 'g'), '\\$&');
     }
-    
+
     $(document).on('click','.tag-autocomplete-dropdown > ul > li > a',function(){
         addtags($.trim($(this).text()));
         $('.thread-tags-input').focus();
         $('.tag-autocomplete-dropdown').hide();
     });
-    
+
     function addtags(tag){
         var value = $('.tags').val();
         var cnt = $('.tags').attr('data-cnt');
@@ -256,14 +256,14 @@ $(document).ready(function () {
 //            $('.tags').val(newstr);
 //            return false;
 //        }
-    });    
-    
-    
+    });
+
+
     function addDNDListener(obj){
         obj.addEventListener('dragover',function(e){
             e.preventDefault();
             e.stopPropagation();
-//            $('.editable-wrapper').css({borderColor: '#ccc'});            
+//            $('.editable-wrapper').css({borderColor: '#ccc'});
         },false);
         obj.addEventListener('dragenter',function(e){
             e.preventDefault();
@@ -276,14 +276,14 @@ $(document).ready(function () {
         },false);
         obj.addEventListener('drop',function(e){
             e.preventDefault();
-            e.stopPropagation();            	
+            e.stopPropagation();
             var filelist = e.dataTransfer.files;
             if(filelist.length > 1){
 //                $('.editable').css('cursor','no-drop');
 //                $('.editable-wrapper').css({borderColor:'#fff'});
                 return;
             }
-            var file = filelist[0];            
+            var file = filelist[0];
             if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/JPEG' || file.type === 'image/JPG' || file.type === 'image/PNG'){
 //                $('.thread-image-preview-wrapper').show();
 //                var w = $('.image-upload-progress').parent().width();
@@ -296,9 +296,9 @@ $(document).ready(function () {
             }
         },false);
     }
-    
+
     function updateTextArea() {
-        $(".duptarea").val($(".editable").html());    
+        $(".duptarea").val($(".editable").html());
     }
 
     function htmlEncode(value) {
@@ -317,7 +317,7 @@ $(document).ready(function () {
             }
         }
     }
-    
+
     function placeCaretAfterNode(node) {
         if (typeof window.getSelection != "undefined") {
             var range = document.createRange();
@@ -328,7 +328,7 @@ $(document).ready(function () {
             selection.addRange(range);
         }
     }
-    
+
     function uploadFile(){
         if(!$('.thread-image').prop('files')[0]){
             window.globalDraftFlag = false;
@@ -341,7 +341,7 @@ $(document).ready(function () {
         var step = 1024*1024;
         var total = file.size;
         var start = 0;
-        
+
         var baseurl = $.trim($('#baseurl').val());
         var reader = new FileReader();
         var filename = file.name.replace(/[-_%&^$#@"'><!()]/g,'');
@@ -358,7 +358,7 @@ $(document).ready(function () {
                     loaded = total;
                 }
             },false);
-            
+
         xhr.open("POST", baseurl+"Ajax_Controller/upload_image/"+filename+"/"+new Date().getTime() + "/" + total);
         xhr.overrideMimeType("application/octet-stream");
         xhr.sendAsBinary(e.target.result);
@@ -378,6 +378,7 @@ $(document).ready(function () {
                         $('.thread-image-preview').css('display', 'block');
                         $('.dupfilename').val(result.image);
                         $('.editable-wrapper').css({borderColor:'#fff'});
+                        $('.thread-image-preview').backgroundDraggable();
                         window.globalDraftFlag = true;
                     }
                 });
@@ -385,9 +386,9 @@ $(document).ready(function () {
         };
         };
         var blob = file.slice(start,step);
-        reader.readAsBinaryString(blob); 
+        reader.readAsBinaryString(blob);
     }
-    
+
     function uploadImages(){
         if(!$('.desc-image').prop('files')[0]){
             window.globalDraftFlag = false;
@@ -400,7 +401,7 @@ $(document).ready(function () {
         var step = 1024*1024;
         var total = file.size;
         var start = 0;
-        
+
         var baseurl = $.trim($('#baseurl').val());
         var reader = new FileReader();
         var filename = file.name.replace(/[-_%&^$#@"'><!()]/g,'');
@@ -417,7 +418,7 @@ $(document).ready(function () {
                     loaded = total;
                 }
             },false);
-            
+
         xhr.open("POST", baseurl+"Ajax_Controller/upload_image/"+filename+"/"+new Date().getTime() + "/" + total);
         xhr.overrideMimeType("application/octet-stream");
         xhr.sendAsBinary(e.target.result);
@@ -456,17 +457,17 @@ $(document).ready(function () {
         };
         };
         var blob = file.slice(start,step);
-        reader.readAsBinaryString(blob); 
+        reader.readAsBinaryString(blob);
     }
-    
-//    function uploadFileDragDrop(file){        
+
+//    function uploadFileDragDrop(file){
 //        var loaded = 0;
 //        var step = 1024*1024;
 //        var total = file.size;
 //        var start = 0;
 //        var progress = document.getElementById('image-upload-progress');
 //        var baseurl = $.trim($('#baseurl').val());
-//        
+//
 //        var reader = new FileReader();
 //
 //        reader.onload = function(e){
@@ -495,7 +496,7 @@ $(document).ready(function () {
 //                    data: {filename: result},
 //                    cache: false,
 //                    success: function(result){
-//                        //$('.thread-image-preview').css('background-image', 'url(' + result.image + ')');                
+//                        //$('.thread-image-preview').css('background-image', 'url(' + result.image + ')');
 //                        document.getElementById('rmimg').setAttribute('data-f',result.image);
 //                        var arr = $('.dupfilename').val();
 //                        if(arr === ''){
@@ -512,9 +513,9 @@ $(document).ready(function () {
 //        };
 //        };
 //        var blob = file.slice(start,step);
-//        reader.readAsBinaryString(blob); 
+//        reader.readAsBinaryString(blob);
 //    }
-    
+
     $('.upload_image_toggle_ios').click(function(){ $('.thread-image-ios').click(); });
     $('.thread-image-ios').change(function(){
         if(!$('.thread-image-ios').prop('files')[0]){
@@ -546,13 +547,13 @@ $(document).ready(function () {
                     loaded = total;
                 }
             },false);
-            
+
         xhr.open("POST", baseurl+"Ajax_Controller/upload_image_ios/"+filename+"/" + total);
         xhr.overrideMimeType("application/octet-stream");
         xhr.sendAsBinary(e.target.result);
         xhr.onreadystatechange = function(){
             if(xhr.readyState == 4 && xhr.status == 200){
-                    var result = JSON.parse(xhr.responseText);                    
+                    var result = JSON.parse(xhr.responseText);
                     alert(result);
                     $('.thread-image-preview').css('background-image', 'url(' + result + ')');
                     $('.thread-image-preview').css('display', 'block');
@@ -563,7 +564,7 @@ $(document).ready(function () {
         };
         };
         var blob = file.slice(start,step);
-        reader.readAsBinaryString(blob); 
+        reader.readAsBinaryString(blob);
     });
 
     $('.btn-post').click(function(){
@@ -611,9 +612,9 @@ $(document).ready(function () {
                         $('.editable-wrapper').slideUp(function(){
                             $('.new-thread-button').slideDown(function(){
                                 $('.no-content-note').remove();
-                                $(result.content).insertBefore('li.thread:first'); 
+                                $(result.content).insertBefore('li.thread:first');
                                 $('li.thread:first').fadeIn();
-                            }); 
+                            });
                         });
                         $('.thread-title-input').val('');
                         $('.editable').html('');
@@ -626,7 +627,7 @@ $(document).ready(function () {
                         $('.thread-image-preview').css('display', 'none');
                         $('.btn-post').removeAttr('disabled');
                         $('.threadul > li:first .thread-desc').find('a').attr('target','_blank');
-                      //  $('.progress').css('width','0%');                        
+                      //  $('.progress').css('width','0%');
                 }
                 else{
                     alert('Something went wrong. Please try again later.');
@@ -673,7 +674,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $(document).on('click', '.remove-image', function(){
         var elem = $(this);
         var filename = $('.dupfilename').val();
@@ -688,7 +689,7 @@ $(document).ready(function () {
                 if(result.response === "true"){
                     $(elem).addClass('upload_image_toggle');
                     $(elem).removeClass('remove-image tilt fg-red');
-                    window.globalDraftFlag = false; 
+                    window.globalDraftFlag = false;
                     $('.thread-image').val("");
                     $('.thread-image-preview-wrapper').hide();
                     $('.thread-image-preview').css('background-image','');
@@ -700,7 +701,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $(document).on('click','.remove-desc-image',function(){
         var filename = $(this).attr('data-path');
         var baseurl = $.trim($('#baseurl').val());
@@ -713,7 +714,7 @@ $(document).ready(function () {
             cache: false,
             success:function(result){
                 if(result.response === "true"){
-                    window.globalDraftFlag = false; 
+                    window.globalDraftFlag = false;
                     $('.desc-image').val("");
                     $(elem).parent().remove();
                     var array = $('.dupimages').val().split(",");
@@ -735,90 +736,97 @@ $(document).ready(function () {
         });
     });
 
-    $(".thread-image-preview").on('mousedown mouseup', function (e) {
+    // $('.thread-image-preview').on('pointerdown pointerup', function (e) {
+    //
+    //     var start = {x: 0, y: 0};
+    //     var move = {x: 0, y: 0};
+    //     var id = $(this).attr('id');
+    //     var origin = {x: 0, y: 0};
+    //     var container = {w: $(this).width(), h: $(this).height()};
+    //
+    //     var containerRatio = container.h / container.w;
+    //
+    //     var img = new Image;
+    //     img.src = $(this).css('background-image').replace(/url\(|\)$/ig, "");
+    //     var background = {w: img.width, h: img.height};
+    //
+    //     var backgroundRatio = background.h / background.w;
+    //
+    //     var min = {x: 0, y: 0};
+    //     var max = {x: 0, y: 0};
+    //
+    //     if (backgroundRatio < containerRatio) {
+    //         min.y = 0;
+    //         min.x = -((container.h * (1 / backgroundRatio)) - container.w);
+    //     }
+    //     else if (backgroundRatio > containerRatio) {
+    //         min.x = 0;
+    //         min.y = -((container.w * backgroundRatio) - container.h);
+    //     }
+    //     else {
+    //         min.x = 0;
+    //         min.y = 0;
+    //     }
+    //     if (e.type == 'pointerdown') {
+    //         $(this).css('border', '1px solid #1ba1e2');
+    //         origin.x = e.pageX;
+    //         origin.y = e.pageY;
+    //         var temp = $(this).css('background-position').split(" ");
+    //         start.x = parseInt(temp[0]);
+    //         start.y = parseInt(temp[1]);
+    //
+    //         $(this).on('pointermove', function (e) {
+    //             move.x = start.x + (e.pageX - origin.x);
+    //             move.y = start.y + (e.pageY - origin.y);
+    //             // $(this).css('background-position', move.x + 'px ' + move.y + 'px');
+    //             // $("#" + id).val('x:' + move.x + ', y:' + move.y);
+    //             var elemRef = $(this);
+    //
+    //             if (move.x <= max.x && move.x >= min.x && move.y <= max.y && move.y >= min.y) {
+    //                 console.log('first If = ' + move.x + 'px ' + move.y + 'px');
+    //                 elemRef.css('background-position', move.x + 'px ' + move.y + 'px');
+    //                 // $("#" + id).val('x:' + move.x + ', y:' + move.y);
+    //             }
+    //             else if (move.x <= max.x && move.x >= min.x) {
+    //                 console.log('first Else If = ' + move.x + 'px ' + move.y + 'px');
+    //                 if (move.y < min.y) {
+    //                     elemRef.css('background-position', move.x + 'px ' + min.y + 'px');
+    //                     // $("#" + id).val('x:' + move.x + ', y:' + min.y);
+    //                 }
+    //                 else if (move.y > max.y) {
+    //                     elemRef.css('background-position', move.x + 'px ' + max.y + 'px');
+    //                     // $("#" + id).val('x:' + move.x + ', y:' + max.y);
+    //                 }
+    //             }
+    //             else if (move.y <= max.y && move.y >= min.y) {
+    //                 console.log('second Else If = ' + move.x + 'px ' + move.y + 'px');
+    //                 if (move.x < min.x) {
+    //                     elemRef.css('background-position', min.x + 'px ' + move.y + 'px');
+    //                     // $("#" + id).val('x:' + min.x + ', y:' + move.y);
+    //                 }
+    //                 else if (move.x > max.x) {
+    //                     elemRef.css('background-position', max.x + 'px ' + move.y + 'px');
+    //                     // $("#" + id).val('x:' + max.x + ', y:' + move.y);
+    //                 }
+    //             }
+    //             else {
+    //                 //
+    //             }
+    //         });
+    //     }
+    //     else {
+    //         $(this).css('border', 'none');
+    //         $(this).off('pointermove');
+    //         $(document.body).focus();
+    //     }
+    //
+    // });
 
-        var start = {x: 0, y: 0};
-        var move = {x: 0, y: 0};
-        var id = $(this).attr('id');
-        var origin = {x: 0, y: 0};
-        var container = {w: $(this).width(), h: $(this).height()};
-
-        var containerRatio = container.h / container.w;
-
-        var img = new Image;
-        img.src = $(this).css('background-image').replace(/url\(|\)$/ig, "");
-        var background = {w: img.width, h: img.height};
-
-        var backgroundRatio = background.h / background.w;
-
-        var min = {x: 0, y: 0};
-        var max = {x: 0, y: 0};
-
-        if (backgroundRatio < containerRatio) {
-            min.y = 0;
-            min.x = -((container.h * (1 / backgroundRatio)) - container.w);
-        }
-        else if (backgroundRatio > containerRatio) {
-            min.x = 0;
-            min.y = -((container.w * backgroundRatio) - container.h);
-        }
-        else {
-            min.x = 0;
-            min.y = 0;
-        }
-        if (e.type == 'mousedown') {
-            $(this).css('border', '1px solid #1ba1e2');
-            origin.x = e.clientX;
-            origin.y = e.clientY;
-            var temp = $(this).css('background-position').split(" ");
-            start.x = parseInt(temp[0]);
-            start.y = parseInt(temp[1]);
-            
-            $(this).mousemove(function (e) {
-                move.x = start.x + (e.clientX - origin.x);
-                move.y = start.y + (e.clientY - origin.y);
-                if (move.x <= max.x && move.x >= min.x && move.y <= max.y && move.y >= min.y) {
-                    $(this).css('background-position', move.x + 'px ' + move.y + 'px');
-                    $("#" + id).val('x:' + move.x + ', y:' + move.y);
-                }
-                else if (move.x <= max.x && move.x >= min.x) {
-                    if (move.y < min.y) {
-                        $(this).css('background-position', move.x + 'px ' + min.y + 'px');
-                        $("#" + id).val('x:' + move.x + ', y:' + min.y);
-                    }
-                    else if (move.y > max.y) {
-                        $(this).css('background-position', move.x + 'px ' + max.y + 'px');
-                        $("#" + id).val('x:' + move.x + ', y:' + max.y);
-                    }
-                }
-                else if (move.y <= max.y && move.y >= min.y) {
-                    if (move.x < min.x) {
-                        $(this).css('background-position', min.x + 'px ' + move.y + 'px');
-                        $("#" + id).val('x:' + min.x + ', y:' + move.y);
-                    }
-                    else if (move.x > max.x) {
-                        $(this).css('background-position', max.x + 'px ' + move.y + 'px');
-                        $("#" + id).val('x:' + max.x + ', y:' + move.y);
-                    }
-                }
-                else {
-                    //
-                }
-            });
-        }
-        else {
-            $(this).css('border', 'none');
-            $(this).off('mousemove');
-            $(document.body).focus();
-        }
-
-    });
-    
     $(document).on('click','.report-spam > ul > li',function(){
-//        $('.report-spam > ul > li').find('input').attr('checked',false);        
-//        $(this).find('input').attr('checked',true);        
+//        $('.report-spam > ul > li').find('input').attr('checked',false);
+//        $(this).find('input').attr('checked',true);
     });
-    
+
 //    $('.featured-threads > ul > li').hover(function(){
 //           $(this).find('.star').removeClass('transDown').addClass('transUp');
 //           $(this).find('.upvotecnt').removeClass('transDown').addClass('transUp');
@@ -830,17 +838,17 @@ $(document).ready(function () {
 
 window.onload = function(){
     if(!XMLHttpRequest.prototype.sendAsBinary){
-    XMLHttpRequest.prototype.sendAsBinary = function(datastr) {  
-            function byteValue(x) {  
-                return x.charCodeAt(0) & 0xff;  
-            }  
-            var ords = Array.prototype.map.call(datastr, byteValue);  
-            var ui8a = new Uint8Array(ords);  
+    XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
+            function byteValue(x) {
+                return x.charCodeAt(0) & 0xff;
+            }
+            var ords = Array.prototype.map.call(datastr, byteValue);
+            var ui8a = new Uint8Array(ords);
             try{
                 this.send(ui8a);
             }catch(e){
                 this.send(ui8a.buffer);
-            }  
-    };  
+            }
+    };
     }
 };

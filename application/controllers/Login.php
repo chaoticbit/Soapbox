@@ -83,6 +83,23 @@ class Login extends CI_Controller {
             redirect(base_url(),'location');
         }
     }
+
+    public function processIOS() {
+        $data['login_url'] = $this->facebook->getLoginUrl(array('scope' => 'email'));
+        $this->load->model('Login_model');
+        $username = $this->security->xss_clean($this->input->post('uname'));
+        $password = $this->security->xss_clean($this->input->post('pword'));
+        $result = $this->Login_model->validate($username, md5($password));
+        if(!$result) {
+            $data = array('response' => false);
+            echo json_encode($data);            
+        }
+        else{
+            $data = array("userid"=>$result['userid'], "username"=>$username, "fname"=>$result['fname'], "lname"=>$result['lname'], "avatarpath"=>$result['avatarpath']);
+            echo json_encode($data);
+        }
+    }
+
     public function signup() {
         $nusername = $this->security->xss_clean($this->input->post('nusername'));
         $npassword = $this->security->xss_clean($this->input->post('npassword'));

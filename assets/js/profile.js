@@ -1,29 +1,29 @@
 $(document).ready(function(){
     
-    $(function () {
-        var prevScroll = 0,
-                curDir = 'down',
-                prevDir = 'up';
+    // $(function () {
+    //     var prevScroll = 0,
+    //             curDir = 'down',
+    //             prevDir = 'up';
 
-        $(window).scroll(function () {
-            if ($(this).scrollTop() >= prevScroll) {
-                curDir = 'down';
-                if (curDir != prevDir) {
-                    $('.headbar').stop();
-                    $('.headbar').animate({top: '0px'}, 300);
-                    prevDir = curDir;
-                }
-            } else {
-                curDir = 'up';
-                if (curDir != prevDir) {
-                    $('.headbar').stop();
-                    $('.headbar').animate({top: '0px'}, 300);
-                    prevDir = curDir;
-                }
-            }
-            prevScroll = $(this).scrollTop();
-        });
-    });
+    //     $(window).scroll(function () {
+    //         if ($(this).scrollTop() >= prevScroll) {
+    //             curDir = 'down';
+    //             if (curDir != prevDir) {
+    //                 $('.headbar').stop();
+    //                 $('.headbar').animate({top: '0px'}, 300);
+    //                 prevDir = curDir;
+    //             }
+    //         } else {
+    //             curDir = 'up';
+    //             if (curDir != prevDir) {
+    //                 $('.headbar').stop();
+    //                 $('.headbar').animate({top: '0px'}, 300);
+    //                 prevDir = curDir;
+    //             }
+    //         }
+    //         prevScroll = $(this).scrollTop();
+    //     });
+    // });
         window.globalDraftFlag = false;
         var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
         var is_safari = navigator.userAgent.indexOf("Safari") > -1;

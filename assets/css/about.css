@@ -1,0 +1,57 @@
+.headbar{
+    width: 100%;
+    height: 50px;
+    background: #272930;
+    border-bottom: 1px solid #000;
+    position: fixed;
+    z-index: 999;
+}
+.logo{
+    display: inline-block;
+    padding: 8px 15px 5px 35px;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+    background: url(../images/logo.png) no-repeat;
+    background-position: 0 11px;
+}
+.section{
+    position: relative;
+    padding: 65px 30px;
+    height: 100%;
+}
+.section.intro{
+    background-color: #020733;
+    background-image: url('../images/innovate.png');
+    background-position: 50% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed !important;
+}
+.section.intro-second{
+    background-image: url('../images/himalaya.jpg');
+    background-position: 0% 0%;
+    background-repeat: no-repeat;
+    background-attachment: fixed !important;
+}
+.section.intro-third{
+    background-image: url('../images/nightlife.jpg');
+    background-position: 0% 0%;
+    background-repeat: no-repeat;
+    background-attachment: fixed !important;
+}
+.subtitle{
+    text-align: center;
+    letter-spacing: 7px;
+    text-indent: 7px;
+    text-transform: uppercase;
+}
+.overlay {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    display: none;
+    background-color: rgba(1, 1, 1, 0.7);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 999;
+}

@@ -15,7 +15,8 @@ class Signup extends CI_Controller{
         $this->load->model('Signup_model');
         $data['categories'] = $this->Signup_model->get_categories();
         $this->load->view('signup_view', $data);
-    }
+    }        
+
     public function validate(){
         
         $data = array();

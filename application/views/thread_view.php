@@ -99,20 +99,22 @@
                                     ?>
                                     <div class="pure-u-1 thread-stats">
                                         <div class="pure-g">
-                                            <div class="pure-u-1 pure-u-md-1-2">
-                                                <?php
-                                                if($thread['up_flag']){
-                                                    echo '<p class="upvote-action"><span id="rm-upvote-thread" class="margin0 bg-cyan fg-white bold pointer" data-tid="' . $thread['srno'] . '"><i class="fa fa-star"></i> You have upvoted</span> ';
-                                                }
-                                                else{
-                                                    echo '<p class="upvote-action"><span id="upvote-thread" class="margin0 bg-grayLighter fg-grayLight bold pointer" data-tid="' . $thread['srno'] . '"><i class="fa fa-star"></i> Upvote this thread</span> ';
-                                                }
-                                                ?>
-                                                <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>
-                                            </div>
-                                            <div class="pure-u-1 pure-u-md-1-2">
-                                                <p class="fg-grayLight stats-span stats-desktop" style="text-align: right;"><span class="pointer upvotes-to-thread"><?php echo ($thread['upvotes'] > 1 || $thread['upvotes']==0) ? $thread['upvotes'] . ' Upvotes' : $thread['upvotes'] . ' Upvote' ?></span><span><?php echo ($thread['replies'] > 1 || $thread['replies']==0) ? $thread['replies'] . ' Replies' : $thread['replies'] . ' Reply' ?></span><span class="pointer views-to-thread"><?php echo ($thread['views'] > 1 || $thread['views']==0) ? $thread['views'] . ' Views' : $thread['views'] . ' View' ?></span></p>
-                                                <p class="fg-grayLight stats-span stats-mobile txt-center" style="display: none;"><span class="pointer upvotes-to-thread"><i class="fa fa-star-o"></i> <?php echo $thread['upvotes']; ?></span> <span><i class="fa fa-comment-o"></i> <?php echo $thread['replies']; ?></span> <span class="pointer views-to-thread"><i class="fa fa-rss"></i> <?php echo $thread['views']; ?></span></p>
+                                            <div class="inner-thread-stats">
+                                                <div class="pure-u-1 pure-u-md-1-2">
+                                                    <?php
+                                                    if($thread['up_flag']){
+                                                        echo '<p class="upvote-action"><span id="rm-upvote-thread" class="margin0 bg-cyan fg-white bold pointer" data-tid="' . $thread['srno'] . '" data-uid="' . $thread['uid']. '"><i class="fa fa-star"></i> You have upvoted</span> ';
+                                                    }
+                                                    else{
+                                                        echo '<p class="upvote-action"><span id="upvote-thread" class="margin0 bg-grayLighter fg-grayLight bold pointer" data-tid="' . $thread['srno'] . '" data-uid="' . $thread['uid']. '"><i class="fa fa-star"></i> Upvote this thread</span> ';
+                                                    }
+                                                    ?>
+                                                    <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>
+                                                </div>
+                                                <div class="pure-u-1 pure-u-md-1-2">
+                                                    <p class="fg-grayLight stats-span stats-desktop" style="text-align: right;"><span class="pointer upvotes-to-thread"><?php echo ($thread['upvotes'] > 1 || $thread['upvotes']==0) ? $thread['upvotes'] . ' Upvotes' : $thread['upvotes'] . ' Upvote' ?></span><span><?php echo ($thread['replies'] > 1 || $thread['replies']==0) ? $thread['replies'] . ' Replies' : $thread['replies'] . ' Reply' ?></span><span class="pointer views-to-thread"><?php echo ($thread['views'] > 1 || $thread['views']==0) ? $thread['views'] . ' Views' : $thread['views'] . ' View' ?></span></p>
+                                                    <p class="fg-grayLight stats-span stats-mobile txt-center" style="display: none;"><span class="pointer upvotes-to-thread"><i class="fa fa-star-o"></i> <?php echo $thread['upvotes']; ?></span> <span><i class="fa fa-comment-o"></i> <?php echo $thread['replies']; ?></span> <span class="pointer views-to-thread"><i class="fa fa-rss"></i> <?php echo $thread['views']; ?></span></p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>                                    
@@ -263,6 +265,7 @@
         </div>
     </body>
     <script src="<?php echo asset_url(); ?>js/jquery-2.1.3.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="<?php echo asset_url(); ?>js/main.js"></script>
     <script src="<?php echo asset_url(); ?>js/thread.js"></script>
     <script src="<?php echo asset_url(); ?>js/medium-editor.js"></script>    

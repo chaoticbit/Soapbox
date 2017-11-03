@@ -1,6 +1,40 @@
 $(document).ready(function () {   
-  
-  $('.toggle-editor').click(function(){
+        
+  //   function isElementInViewport (el) {
+
+  //     if (typeof jQuery === "function" && el instanceof jQuery) {
+  //         el = el[0];
+  //     }
+
+  //     var rect = el.getBoundingClientRect();
+
+  //     return (
+  //         rect.top >= 0 &&
+  //         rect.left >= 0 &&
+  //         rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+  //         rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+  //     );
+  // }
+
+  //   if(!isElementInViewport($('.inner-thread-stats'))) {
+  //       $('.thread-stats').find('.inner-thread-stats').removeClass('inner-thread-stats').addClass('sticky-thread-stats');
+  //       var widthStats = $('.thread-stats').width();  
+  //       $('.sticky-thread-stats').css('width', widthStats + 'px');
+  //       $(window).scroll(function() {
+  //       if($(window).scrollTop() + $(window).height() == $(document).height()) {
+  //           window.toBottom = true;
+  //           $('.thread-stats').find('.sticky-thread-stats').removeClass('sticky-thread-stats').addClass('inner-thread-stats');
+  //       }
+  //       else if(!isElementInViewport($('.inner-thread-stats'))){
+  //           $('.thread-stats').find('.inner-thread-stats').removeClass('inner-thread-stats').addClass('sticky-thread-stats');
+  //           var widthStats = $('.thread-stats').width();  
+  //           $('.sticky-thread-stats').css('width', widthStats + 'px');
+  //       }
+  //   });
+  //   }   
+
+    
+   $('.toggle-editor').click(function(){
         $(this).closest('.new-thread-button').slideUp();
         $('.editable-wrapper').slideDown(function(){
             $('.editable').focus();
@@ -142,6 +176,7 @@ $(document).ready(function () {
     $(document).on('click', '#upvote-thread', function(){
         var baseurl = $.trim($('#baseurl').val());
         var tid = $(this).attr('data-tid');
+        var threadOwnerId = $(this).attr('data-uid');
         var elem = $(this);
         $.ajax({
             type: 'post',
@@ -156,7 +191,7 @@ $(document).ready(function () {
                 if(result.response === "false"){
                     alert('Something went wrong. Please try again later.');
                 }
-                else{
+                else{                    
                     $(elem).parent().find('.loader').hide();
                     $(elem).parent().html('<p><span id="rm-upvote-thread" class="margin0 bg-cyan fg-white bold pointer" data-tid="'+tid+'"><i class="fa fa-star"></i> You have upvoted</span> <i style="margin-left: 5px;display:none;" class="loader fa fa-circle-o-notch fa-spin"></i></p>');
                     if(result.count==1){

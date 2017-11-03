@@ -16,7 +16,7 @@
         <div class="top-nav hide-mobile">
             <ul class="navbar">
                 <li><a href="javascript:;">Upcoming</a></li>
-                <li><a href="javascript:;">About</a></li>
+                <li><a href="<?php echo base_url(); ?>Info">About</a></li>
                 <li><a href="javascript:;">FAQs</a></li>
                 <li><a href="javascript:;">Contact</a></li>
                 <li><a href="javascript:;">Developers</a></li>
@@ -91,7 +91,7 @@
                         <p class="light txt-justify" style="margin-top: 15px;">We made it really, really simple for people to ask any question and get answers from real people with first-hand experience.</p>
                         <p class="bold">You already know how this works</p>
                         <p class="light txt-justify">Choose from the topics of your interest to create a feed of information tuned to your interests. Create a thread to share knowledge.</p>
-                        <?php echo '<a href="' . $login_url . '"><button class="btn-general fg-white" style="border-color:#3b5988;margin-top: 5px;background: #3b5988;">LOGIN USING FACEBOOK</button></a>'; ?>
+                        <!-- <?php echo '<a href="' . $login_url . '"><button class="btn-general fg-white" style="border-color:#3b5988;margin-top: 5px;background: #3b5988;">LOGIN USING FACEBOOK</button></a>'; ?> -->
                     </div>
                 </div>
             </div>

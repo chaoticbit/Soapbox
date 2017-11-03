@@ -3,7 +3,7 @@
     <head>
         <title>Soapbox</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
         <link rel="stylesheet" href="<?php echo asset_url(); ?>css/main.css" />
         <link rel="stylesheet" href="<?php echo asset_url(); ?>css/font-awesome.min.css" />
         <link rel="stylesheet" href="<?php echo asset_url(); ?>css/grids.css" />
@@ -12,8 +12,8 @@
         <link rel="stylesheet" href="<?php echo asset_url(); ?>css/index.css" />
     </head>
     <body>
-            <?php 
-//            echo '<a href="' . $logout_url. '">Logout</a>'; 
+            <?php
+//            echo '<a href="' . $logout_url. '">Logout</a>';
 //            echo "<a href=".$user_profile['link']." target='_blank' ><img src="."https://graph.facebook.com/".$user_profile['id']."/picture?type=large".">"."</a>"."<p class='profile_name'>Welcome ! <em>".$user_profile['name']."</em></p>";
 //            echo "<p>First Name : ".$user_profile['first_name']."</p>";
 //            echo "<p>Id : ".$user_profile['id']."</p>";
@@ -22,14 +22,15 @@
 //            echo "<p>email : ".$user_profile['email']."</p>";
 //            echo "<p>Facebook URL : "."<a href=".$user_profile['link']." target='_blank'"."> https://www.facebook.com/".$user_profile['id']."</a></p>";
             ?>
+        <input type="hidden" class="hdnUserId" value="<?php echo $userid; ?>" />
         <div class="pure-g">
             <?php include 'headbar.php'; ?>
-            <div class="filler"></div>            
+            <div class="filler"></div>
             <div class="search-wrapper"></div>
             <div class="container">
                 <div class="pure-g">
                     <div class="pure-u-1 pure-u-md-1-6 filler-left">
-                        
+
                     </div>
                     <div class="pure-u-1 pure-u-md-5-6 md56-body">
                         <div class="pure-g">
@@ -82,10 +83,10 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                               <div class="pure-u-1 thread-image-preview-wrapper" style="display:none;">                                                    
-                                                   <div class="thread-image-preview">
+                                               <div class="pure-u-1 thread-image-preview-wrapper" style="display:none;">
+                                                   <div class="thread-image-preview" touch-action="none">
 <!--                                                        <i class="fa fa-times-circle pointer fg-white flt-right remove-image" style="margin: 10px 8px 0 0;text-shadow: 0 0 5px rgba(0,0,0,0.7);" title="Remove image"></i>-->
-                                                    </div>   
+                                                    </div>
                                                     <progress class="image-upload-progress" id="image-upload-progress" value="0" max="100"></progress>
                                                 </div>
                                                 <div class="pure-u-1" style="position: relative;">
@@ -93,7 +94,7 @@
                                                     <input type="text" class="thread-title-input" placeholder="Title" />
                                                 </div>
                                                 <div class="pure-u-1">
-                                                    <div class="editable" id="editable" data-text="Start writing here..."></div>                                               
+                                                    <div class="editable" id="editable" data-text="Start writing here..."></div>
                                                     <textarea class="duptarea hidden"></textarea>
                                                 </div>
                                                 <div class="pure-u-1 tag-input-div" style="border-top: 1px solid rgba(235,235,235,0.5);">
@@ -108,7 +109,7 @@
                                                 </div>
                                                 <div class="pure-g" style="padding: 5px 0;">
                                                     <div class="pure-u-1 pure-u-md-1-2">
-                                                        <?php 
+                                                        <?php
                                                         if($useragent == 'ios'){
                                                             echo '<p><a href="javascript:;" class="fg-darkCyan upload_image_toggle_ios">Add photo</a></p>';
                                                             echo '<input type="file" class="hidden thread-image-ios" accept="image/*" name="file">';
@@ -120,7 +121,7 @@
                                                             echo '<input type="file" class="hidden desc-image" accept="image/*" name="file">';
                                                         }
                                                         ?>
-                                                        <input type="hidden" class="dupfilename" id="dupfilename" />                                                        
+                                                        <input type="hidden" class="dupfilename" id="dupfilename" />
                                                         <input type="hidden" class="dupimages" id="dupimages" />
                                                     </div>
                                                     <div class="pure-u-1 pure-u-md-1-2 txt-right">
@@ -177,7 +178,7 @@
                                             }
                                             echo '</ul>';
                                             echo '</div>';
-                                            echo '</div>';                                            
+                                            echo '</div>';
                                             echo '</li>';
                                             echo '</ul>';
                                             echo '</div>';
@@ -300,6 +301,8 @@
         </div>
     </body>
     <script src="<?php echo asset_url(); ?>js/jquery-2.1.3.min.js"></script>
+    <script src="<?php echo asset_url(); ?>js/draggable_background.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="<?php echo asset_url(); ?>js/main.js"></script>
     <script src="<?php echo asset_url(); ?>js/index.js"></script>
     <script src="<?php echo asset_url(); ?>js/medium-editor.js"></script>

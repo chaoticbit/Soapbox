@@ -17,9 +17,6 @@ class Settings_model extends CI_Model{
         if($data['lname']){
             $sql.=" lname='" . $data['lname'] . "',";
         }
-        else{
-            $sql=rtrim($sql,",");
-        }
         if($data['imagepath']){
             $sql.=" avatarpath='" . $data['imagepath'] . "',";
         }

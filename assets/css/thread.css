@@ -369,3 +369,16 @@ ins {
     background: rgba(0,245,0,0.2) !important;
     display: block;
 }
+.inner-thread-stats {
+    width: 100%;
+}
+.sticky-thread-stats {
+    position: fixed;
+    bottom: 0;
+    left: auto;
+    padding: 5px 10px 0 10px;
+    width: inherit;
+    margin: auto;
+    background: #fff;
+    border-top: 1px solid #eae9ed;
+}
